@@ -1,0 +1,12 @@
+$td: 358px;
+$md: 676px;
+$mg: 800px;
+$lg: 1124px;
+$xl: 1380px;
+$xxl: 1536px;
+
+@mixin screen($size) {
+    @media only screen and (min-width: $size) {
+        @content;
+    }
+}
