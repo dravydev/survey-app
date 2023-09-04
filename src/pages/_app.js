@@ -1,8 +1,17 @@
 import '@/styles/globals.scss'
 
-const App = ({ Component, pageProps }) => {
+import { SessionProvider } from 'next-auth/react'
+
+const App = ({ Component, pageProps: { session, ...pageProps } }) => {
+
+  const Layout = Component.Layout || (({ children }) => children)
+
   return (
-    <Component {...pageProps} />
+    <SessionProvider session={session}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SessionProvider>
   )
 }
 
