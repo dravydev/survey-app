@@ -12,6 +12,7 @@
 }
 
 .loading svg {
+    fill: rgb($main);
     font-size: 2.25rem;
     animation: spinner .5s infinite linear;
 }
@@ -32,17 +33,22 @@
     animation: loadHeader .5s;
 
     &Wrapper {
-        gap: 3rem;
-        padding: 1.5rem;
+        gap: 1.5rem;
+        padding: .75rem;
         display: flex;
         align-items: center;
         width: min(100%, $xxl);
         margin-inline: auto;
+
+        @include screen($md) {
+            gap: 3rem;
+            padding: 1.5rem;
+        }
     }
 
     &Logo {
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         user-select: none;
 
         img {
@@ -76,6 +82,11 @@
         &Name {
             font-weight: 500;
             font-size: 1rem;
+            display: none;
+
+            @include screen($md) {
+                display: inline;
+            }
         }
 
     }
@@ -112,8 +123,12 @@
 
 
     &Wrapper {
-        padding: 1.5rem;
+        padding: .75rem;
         width: min(100%, $xxl);
         margin-inline: auto;
+
+        @include screen($md) {
+            padding: 1.5rem;
+        }
     }
 }

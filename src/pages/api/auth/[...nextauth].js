@@ -1,3 +1,6 @@
+import Survey from '@/models/Survey'
+import mongoConnect from '@/lib/mongoConnect'
+
 import NextAuth from 'next-auth/next'
 import GithubProvider from 'next-auth/providers/github'
 
@@ -5,7 +8,7 @@ import { MongoDBAdapter } from '@auth/mongodb-adapter'
 
 import mongoClient from '@/lib/mongoClient'
 
-export default NextAuth({
+export const authOptions = {
     adapter: MongoDBAdapter(mongoClient),
     session: {
         strategy: 'database',
@@ -16,5 +19,15 @@ export default NextAuth({
             clientId: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET
         })
-    ]
-})
+    ],
+    callbacks: {
+        session: async ({ session, user }) => {
+
+            session.user.id = user.id
+
+            return session
+        }
+    }
+}
+
+export default NextAuth(authOptions)

@@ -1,0 +1,59 @@
+@use "@/styles/variables" as *;
+@use "@/styles/responsive" as *;
+
+.root {
+    gap: 1.5rem;
+    display: grid;
+    margin-block: 1.5rem;
+
+    @include screen($mg) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include screen($xl) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.item {
+    gap: .75rem;
+    padding: 1.5rem;
+    border-radius: .5rem;
+    border: 1px solid rgb($foreground);
+    display: flex;
+    flex-direction: column;
+
+    &Title {
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+    &Description {
+        font-size: .975rem;
+        height: 120px;
+        overflow: hidden;
+    }
+
+    &Footer {
+        gap: .75rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @include screen($md) {
+            align-items: center;
+            flex-direction: row;
+        }
+
+        &Date {
+            gap: .75rem;
+            font-size: .975rem;
+            font-weight: 500;
+            display: flex;
+
+            svg {
+                font-size: 1.1rem;
+            }
+        }
+    }
+}

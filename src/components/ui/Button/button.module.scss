@@ -8,13 +8,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(255, 255, 255);
-    background-color: rgb($main);
-    transition: background-color .25s;
-    
-    &:hover {
-        background-color: rgba($main, .9);
-    }
 
     svg {
         font-size: 1.15rem;
@@ -23,5 +16,26 @@
     span {
         font-size: .925rem;
         font-weight: 600;
+    }
+}
+
+.primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb($main);
+    transition: background-color .25s;
+    
+    &:hover {
+        background-color: rgba($main, .9);
+    }
+}
+
+.secondary {
+    color: rgb($primary);
+    border: 1px solid rgb($primary);
+    transition: background-color .25s, color .25s;
+
+    &:hover {
+        color: rgb($background);
+        background-color: rgb($primary);
     }
 }

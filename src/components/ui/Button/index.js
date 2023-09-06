@@ -7,7 +7,18 @@ const PrimaryButton = ({ children, ...props }) => {
     return (
         <button
             onClick={props.onClick}
-            className={cn(styles.root, inter)}
+            className={cn(styles.root, styles.primary, inter)}
+        >
+            {children}
+        </button>
+    )
+}
+
+const SecondaryButton = ({ children, ...props }) => {
+    return (
+        <button
+            onClick={props.onClick}
+            className={cn(styles.root, styles.secondary, inter)}
         >
             {children}
         </button>
@@ -15,5 +26,6 @@ const PrimaryButton = ({ children, ...props }) => {
 }
 
 export {
-    PrimaryButton
+    PrimaryButton,
+    SecondaryButton
 }

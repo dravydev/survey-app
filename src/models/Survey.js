@@ -5,6 +5,14 @@ const surveySchema = new Schema({
         type: Schema.Types.ObjectId,
         auto: true
     },
+    title: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
     ownerId: {
         type: Schema.Types.ObjectId,
         required: true
