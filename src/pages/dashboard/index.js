@@ -1,20 +1,27 @@
 import Dashboard from '@/components/layouts/Dashboard'
 
-import { useSession, signIn } from 'next-auth/react'
-import { useEffect } from 'react'
+import Heading from '@/components/dashboard/Heading'
+
+import { PrimaryButton } from '@/components/ui/Button'
+
+import {
+    BiPlus
+} from 'react-icons/bi'
+
+import { Fragment } from 'react'
 
 const DashboardHome = () => {
-
-    const { data, status } = useSession()
-
-    useEffect(() => {
-        console.log(data)
-    }, [status])
-
     return (
-        <>
-            <button onClick={() => signIn('github')}>Zaloguj</button>
-        </>
+        <Fragment>
+
+            <Heading title="Twoje ankiety">
+                <PrimaryButton>
+                    <BiPlus />
+                    <span>Utwórz ankietę</span>
+                </PrimaryButton>
+            </Heading>
+
+        </Fragment>
     )
 }
 

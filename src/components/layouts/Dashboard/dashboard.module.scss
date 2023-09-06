@@ -1,0 +1,119 @@
+@use "@/styles/keyframes";
+@use "@/styles/variables" as *;
+@use "@/styles/responsive" as *;
+
+.loading,
+.authorize {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: grid;
+    place-content: center;
+}
+
+.loading svg {
+    font-size: 2.25rem;
+    animation: spinner .5s infinite linear;
+}
+
+.authorize {
+    gap: .75rem;
+    text-align: center;
+
+    &Title {
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+}
+
+.header {
+    background-color: rgb($background);
+    border-bottom: 1px solid rgb($foreground);
+    animation: loadHeader .5s;
+
+    &Wrapper {
+        gap: 3rem;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        width: min(100%, $xxl);
+        margin-inline: auto;
+    }
+
+    &Logo {
+        width: 40px;
+        height: 40px;
+        user-select: none;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &User {
+        cursor: pointer;
+        gap: .75rem;
+        display: flex;
+        align-items: center;
+        user-select: none;
+        margin-left: auto;
+
+        &Image {
+            width: 30px;
+            height: 30px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                object-fit: cover;
+                pointer-events: none;
+            }
+        }
+
+        &Name {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+    }
+
+    &Actions {
+        gap: 1.5rem;
+        display: flex;
+
+        &Item {
+            cursor: pointer;
+            display: grid;
+
+            svg {
+                font-size: 1.25rem;
+                animation: loadActionsItem .25s;
+            }
+        }
+    }
+}
+
+@keyframes loadActionsItem {
+    50% {
+        scale: .75;
+    }
+}
+
+@keyframes loadHeader {
+    0% {
+        translate: 0 -100%;
+    }
+}
+
+.main {
+
+
+    &Wrapper {
+        padding: 1.5rem;
+        width: min(100%, $xxl);
+        margin-inline: auto;
+    }
+}

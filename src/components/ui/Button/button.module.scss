@@ -1,0 +1,27 @@
+@use "@/styles/variables" as *;
+
+.root {
+    cursor: pointer;
+    padding: .75rem;
+    border-radius: .5rem;
+    gap: .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(255, 255, 255);
+    background-color: rgb($main);
+    transition: background-color .25s;
+    
+    &:hover {
+        background-color: rgba($main, .9);
+    }
+
+    svg {
+        font-size: 1.15rem;
+    }
+
+    span {
+        font-size: .925rem;
+        font-weight: 600;
+    }
+}

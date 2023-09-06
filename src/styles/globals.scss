@@ -9,12 +9,18 @@
 }
 
 :root {
-    --primary: 255, 255, 255;
-    --secondary: 243, 243, 243;
-    --main: 255, 255, 255;
-    --background: 5, 7, 11;
-    --foreground: 9, 12, 19;
+    --primary: 22, 23, 25;
+    --main: 17, 138, 110;
+    --background: 255, 255, 255;
+    --foreground: 242, 241, 241;
 }
+
+[data-theme='dark'] {
+    --primary: 255, 255, 255;
+    --main: 17, 138, 110;
+    --background: 14, 16, 26;
+    --foreground: 21, 24, 38;
+  }
 
 body {
     color: rgb($primary);
