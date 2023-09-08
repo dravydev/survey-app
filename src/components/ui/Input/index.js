@@ -1,6 +1,6 @@
 import styles from './input.module.scss'
 
-import { useCallback, useId } from 'react'
+import { useCallback, useEffect, useId, useRef } from 'react'
 
 import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
@@ -8,16 +8,25 @@ import inter from '@/assets/fonts/inter'
 const Input = ({ ...props }) => {
 
     const inputId = useId()
+    const inputRef = useRef()
 
-    const handleChange = useCallback(event => {
+    const handleChange = useCallback(() => {
 
-        const { parentNode, value } = event.target
+        const { parentNode, value } = inputRef.current
 
         value.length
             ? parentNode.classList.add(styles.rootActive)
             : parentNode.classList.remove(styles.rootActive)
 
-    }, [])
+    }, [inputRef])
+
+    useEffect(() => {
+
+        const { parentNode, value } = inputRef.current
+
+        if (value.length) parentNode.classList.add(styles.rootActive)
+
+    }, [inputRef])
 
     return (
         <div className={cn(styles.root, props.className ? props.className : '')}>
@@ -28,6 +37,7 @@ const Input = ({ ...props }) => {
                 {props.label}
             </label>
             <input
+                ref={inputRef}
                 id={inputId}
                 name={props.name}
                 defaultValue={props.defaultValue}

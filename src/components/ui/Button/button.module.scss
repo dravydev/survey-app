@@ -2,7 +2,7 @@
 
 .root {
     cursor: pointer;
-    padding: .75rem;
+    padding: .65rem .75rem;
     border-radius: .5rem;
     gap: .75rem;
     display: flex;
@@ -14,7 +14,7 @@
     }
 
     span {
-        font-size: .925rem;
+        font-size: .9rem;
         font-weight: 600;
     }
 }
@@ -31,7 +31,6 @@
 
 .secondary {
     color: rgb($primary);
-    border: 1px solid rgb($primary);
     transition: background-color .25s, color .25s;
 
     &:hover {

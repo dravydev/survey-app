@@ -1,0 +1,50 @@
+@use "@/styles/variables" as *;
+
+.options {
+    z-index: 1;
+    top: calc(75px + .75rem);
+    gap: .75rem;
+    padding: .75rem;
+    border-radius: .5rem;
+    border: 1px solid rgb($foreground);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    background-color: rgb($background);
+
+    &Title {
+        font-weight: 600;
+        font-size: 1.25rem;
+        margin-right: auto;
+    }
+}
+
+.block {
+    padding: 1.5rem;
+    border-radius: .5rem;
+    border: 1px solid rgb($foreground);
+}
+
+.container {
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-inline: .75rem;
+    display: flex;
+    flex-direction: column;
+
+    &Item {
+        gap: .75rem;
+        display: flex;
+        flex-direction: column;
+        
+        &Move {
+            cursor: move;
+            display: flex;
+            justify-content: center;
+
+            svg {
+                font-size: 1.75rem;
+            }
+        }
+    }
+}

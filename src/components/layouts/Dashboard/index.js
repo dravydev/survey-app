@@ -6,7 +6,6 @@ import DashboardMain from './DashboardMain'
 import SurveysProvider from '@/providers/SurveysProvider'
 
 import { useSession } from 'next-auth/react'
-import { Fragment } from 'react'
 
 const Dashboard = ({ children }) => {
 

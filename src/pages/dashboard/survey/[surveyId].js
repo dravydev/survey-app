@@ -2,6 +2,8 @@ import Dashboard from '@/components/layouts/Dashboard'
 
 import Heading from '@/components/dashboard/Heading'
 
+import Survey from '@/components/dashboard/Survey'
+
 import { Fragment } from 'react'
 
 const DashboardSurvey = () => {
@@ -9,6 +11,8 @@ const DashboardSurvey = () => {
         <Fragment>
 
             <Heading title="Ankieta" />
+
+            <Survey />
 
         </Fragment>
     )

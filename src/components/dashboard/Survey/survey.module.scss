@@ -1,0 +1,14 @@
+@use "@/styles/variables" as *;
+@use "@/styles/responsive" as *;
+
+.root {
+    display: flex;
+    align-items: flex-start;
+    margin-block: 1.5rem;
+
+    &Bookmark {
+        padding-inline: 1.5rem;
+        width: min(100%, $lg);
+        margin-inline: auto;
+    }
+}
