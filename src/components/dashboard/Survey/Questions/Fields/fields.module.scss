@@ -1,0 +1,11 @@
+@use "@/styles/variables" as *;
+
+.text {
+    font-size: .925rem;
+    font-weight: 400;
+    padding-block: .75rem;
+    color: rgb($primary, .75);
+    user-select: none;
+    pointer-events: none;
+    border-bottom: 1px dashed rgb($foreground);
+}
