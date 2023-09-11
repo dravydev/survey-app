@@ -2,15 +2,16 @@
 
 .options {
     z-index: 1;
-    top: calc(75px + .75rem);
+    top: 75px;
     gap: .75rem;
     padding: .75rem;
     border-radius: .5rem;
-    border: 1px solid rgb($foreground);
+    margin-top: -.75rem;
     display: flex;
     align-items: center;
     position: sticky;
     background-color: rgb($background);
+    box-shadow: 0 1.5rem 2rem rgb($background, .75);
 
     &Title {
         font-weight: 600;
@@ -26,19 +27,21 @@
 }
 
 .container {
-    gap: 1.5rem;
     margin-top: 1.5rem;
     padding-inline: .75rem;
-    display: flex;
-    flex-direction: column;
 
     &Item {
         gap: .75rem;
         display: flex;
         flex-direction: column;
-        
+        background-color: rgb($background);
+        margin-bottom: 1.5rem;
+
+        &Active {
+            border-color: rgb($main);
+        }
+
         &Move {
-            cursor: move;
             display: flex;
             justify-content: center;
 
