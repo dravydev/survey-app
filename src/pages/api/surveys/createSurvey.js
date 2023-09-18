@@ -18,13 +18,12 @@ const schema = Joi.object({
         .min(3)
         .max(256)
         .required()
+
 })
 
 const createSurvey = async (req, res) => {
 
     const validator = schema.validate(req.body)
-
-    console.log(validator.value.description.length)
 
     if (validator.error) {
 
@@ -39,21 +38,50 @@ const createSurvey = async (req, res) => {
         return
     }
 
-    const session = await getServerSession(req, res, authOptions)
+    const { user } = await getServerSession(req, res, authOptions)
 
     const { title, description } = validator.value
 
     await mongoConnect()
 
     const survey = await Survey.create({
-        ownerId: session.user.id,
         title: title,
-        description: description
+        description: description,
+        questions: [
+            {
+                title: 'Przykładowe pytanie - wybierz opcje',
+                description: null,
+                isDescription: false,
+                isRequired: true,
+                mode: 'singleChoice',
+                fields: [
+                    {
+                        type: 'select',
+                        slug: 'opcja-1',
+                        text: 'Opcja 1'
+                    },
+                    {
+                        type: 'select',
+                        slug: 'opcja-2',
+                        text: 'Opcja 2'
+                    },
+                    {
+                        type: 'select',
+                        slug: 'opcja-3',
+                        text: 'Opcja 3'
+                    }
+                ]
+            }
+        ],
+        ownerId: user.id
     })
 
     res.json({
         survey: {
-            _id: survey._id
+            _id: survey._id,
+            title: survey.title,
+            description: survey.description,
+            createdAt: survey.createdAt
         }
     })
 

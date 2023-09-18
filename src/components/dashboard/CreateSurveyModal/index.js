@@ -6,12 +6,15 @@ import { PrimaryButton } from '@/components/ui/Button'
 
 import { createSurvey } from '@/actions/surveys'
 
+import { useSurveys } from '@/hooks'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 
 const CreateSurveyModal = ({ ...props }) => {
 
     const router = useRouter()
+
+    const { surveys, setSurveys } = useSurveys()
 
     const handleForm = useCallback(async event => {
 
@@ -26,6 +29,11 @@ const CreateSurveyModal = ({ ...props }) => {
             return
         }
 
+        setSurveys([
+            ...surveys,
+            data.survey
+        ])
+
         router.push(`/dashboard/survey/${data.survey._id}`)
 
     }, [])
@@ -37,6 +45,7 @@ const CreateSurveyModal = ({ ...props }) => {
         >
 
             <form
+                autoComplete="off"
                 onSubmit={handleForm}
                 className={styles.root}
             >

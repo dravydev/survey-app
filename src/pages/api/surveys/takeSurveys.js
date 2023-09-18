@@ -5,16 +5,22 @@ import { authOptions } from '../auth/[...nextauth]'
 
 import { getServerSession } from 'next-auth/next'
 
-const createSurvey = async (req, res) => {
+const takeSurveys = async (req, res) => {
 
     const { user } = await getServerSession(req, res, authOptions)
 
     await mongoConnect()
 
-    const surveys = await Survey.find({ ownerId: user.id })
+    const surveys = await Survey.find({ ownerId: user.id }, {
+        title: 1,
+        description: 1,
+        createdAt: 1
+    })
+
+    console.log(surveys)
 
     res.json({ surveys })
 
 }
 
-export default createSurvey
+export default takeSurveys

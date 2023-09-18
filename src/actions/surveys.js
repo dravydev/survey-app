@@ -21,13 +21,12 @@ const createSurvey = async data => {
 
 }
 
-const takeSurveys = async data => {
+const takeSurveys = async () => {
 
     const response = await sendRequest({
         method: 'get',
         path: '/surveys/takeSurveys',
-        timeout: 5_000,
-        data: data
+        timeout: 5_000
     })
 
     if (response?.data?.error) return {
@@ -42,7 +41,29 @@ const takeSurveys = async data => {
 
 }
 
+const takeSurvey = async data => {
+
+    const response = await sendRequest({
+        method: 'get',
+        path: '/surveys/takeSurvey?surveyId=' + data.surveyId,
+        timeout: 5_000,
+        data: data
+    })
+
+    if (response?.data?.error) return {
+        error: response.data.details
+    }
+
+    return {
+        data: {
+            survey: response.data.survey
+        }
+    }
+
+}
+
 export {
     createSurvey,
-    takeSurveys
+    takeSurveys,
+    takeSurvey
 }

@@ -6,7 +6,7 @@ import QuestionsContainer from './QuestionsContainer'
 const Questions = () => {
     return (
         <div className={styles.root}>
-            <QuestionsOptions title="Test" />
+            <QuestionsOptions />
             <QuestionsContainer />
         </div>
     )

@@ -4,17 +4,17 @@ import Heading from '@/components/dashboard/Heading'
 
 import Survey from '@/components/dashboard/Survey'
 
-import { Fragment } from 'react'
+import SurveyProvider from '@/providers/SurveyProvider'
 
 const DashboardSurvey = () => {
     return (
-        <Fragment>
+        <SurveyProvider>
 
             <Heading title="Ankieta" />
 
             <Survey />
 
-        </Fragment>
+        </SurveyProvider>
     )
 }
 
