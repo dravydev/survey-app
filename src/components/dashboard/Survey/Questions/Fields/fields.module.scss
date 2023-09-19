@@ -51,13 +51,21 @@
                 border-color: rgb($main);
             }
         }
+
+        &Delete {
+            cursor: pointer;
+            padding: .5rem;
+            display: grid;
+
+            svg {
+                font-size: 1rem;
+            }
+        }
     }
 
     &Insert {
         gap: .5rem;
         display: flex;
-        // align-items: center;
-        // font-size: .975rem;
 
         &Text {
             font-size: .975rem;

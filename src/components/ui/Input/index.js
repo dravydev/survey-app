@@ -18,6 +18,8 @@ const Input = ({ ...props }) => {
             ? parentNode.classList.add(styles.rootActive)
             : parentNode.classList.remove(styles.rootActive)
 
+        if (props.onChange) props.onChange(value)
+
     }, [inputRef])
 
     useEffect(() => {

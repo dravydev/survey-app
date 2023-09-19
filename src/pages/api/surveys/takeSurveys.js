@@ -17,8 +17,6 @@ const takeSurveys = async (req, res) => {
         createdAt: 1
     })
 
-    console.log(surveys)
-
     res.json({ surveys })
 
 }

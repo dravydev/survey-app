@@ -15,8 +15,8 @@ const Bookmarks = ({ ...props }) => {
     const bookmarks = useMemo(() => {
         return [
             {
-                value: 'editor',
-                text: 'Edytor',
+                value: 'questions',
+                text: 'Pytania',
                 icon: <BiEditAlt />
             },
             {

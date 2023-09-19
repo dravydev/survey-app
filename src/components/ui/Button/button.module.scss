@@ -23,9 +23,15 @@
     color: rgb(255, 255, 255);
     background-color: rgb($main);
     transition: background-color .25s;
-    
+
     &:hover {
         background-color: rgba($main, .9);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        color: rgb($primary);
+        background-color: rgb($foreground);
     }
 }
 

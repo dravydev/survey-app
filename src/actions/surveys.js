@@ -41,11 +41,31 @@ const takeSurveys = async () => {
 
 }
 
-const takeSurvey = async data => {
+const takeSurvey = async params => {
 
     const response = await sendRequest({
         method: 'get',
-        path: '/surveys/takeSurvey?surveyId=' + data.surveyId,
+        path: '/surveys/takeSurvey?surveyId=' + params.surveyId,
+        timeout: 5_000
+    })
+
+    if (response?.data?.error) return {
+        error: response.data.details
+    }
+
+    return {
+        data: {
+            survey: response.data.survey
+        }
+    }
+
+}
+
+const updateSurveyQuestions = async (params, data) => {
+
+    const response = await sendRequest({
+        method: 'post',
+        path: '/surveys/updateSurveyQuestions?surveyId=' + params.surveyId,
         timeout: 5_000,
         data: data
     })
@@ -65,5 +85,6 @@ const takeSurvey = async data => {
 export {
     createSurvey,
     takeSurveys,
-    takeSurvey
+    takeSurvey,
+    updateSurveyQuestions
 }

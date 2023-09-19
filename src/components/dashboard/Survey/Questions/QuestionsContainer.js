@@ -4,13 +4,11 @@ import QuestionsContainerItem from './QuestionsContainerItem'
 
 import { useSurvey } from '@/hooks'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 const QuestionsContainer = () => {
 
-    const { survey } = useSurvey()
-
-    const [questions, setQuestions] = useState(survey.questions)
+    const { survey, setSurvey } = useSurvey()
 
     const onDragEnd = useCallback(event => {
 
@@ -18,12 +16,12 @@ const QuestionsContainer = () => {
 
         if (!destination) return
 
-        const [itemToMove] = questions.splice(source.index, 1)
-        questions.splice(destination.index, 0, itemToMove)
+        const [itemToMove] = survey.questions.splice(source.index, 1)
+        survey.questions.splice(destination.index, 0, itemToMove)
 
-        setQuestions([...questions])
+        setSurvey({ ...survey })
 
-    }, [])
+    }, [survey])
 
     return (
         <div className={styles.container}>
@@ -36,7 +34,7 @@ const QuestionsContainer = () => {
 
                     {provided => (
                         <div ref={provided.innerRef}>
-                            {questions.map((question, index) => <QuestionsContainerItem
+                            {survey.questions.map((question, index) => <QuestionsContainerItem
                                 key={question._id}
                                 {...question}
                                 index={index}

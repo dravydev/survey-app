@@ -3,6 +3,7 @@ import styles from './questions.module.scss'
 import Input from '@/components/ui/Input'
 import Switch from '@/components/ui/Switch'
 import Select from '@/components/ui/Select'
+import Tooltip from '@/components/ui/Tooltip'
 
 import Fields from './Fields'
 
@@ -10,16 +11,28 @@ import { PiDotsSix } from 'react-icons/pi'
 
 import cn from '@/utils/cn'
 
-import { useSurvey } from '@/hooks'
+import {
+    BiDuplicate,
+    BiTrashAlt
+} from 'react-icons/bi'
+
+import { SecondaryButton } from '@/components/ui/Button'
+
 import { Draggable } from 'react-beautiful-dnd'
-import { useMemo, useState } from 'react'
+import { useDebounce, useSurvey } from '@/hooks'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const QuestionsContainerItem = ({ ...props }) => {
 
-    const [mode, setMode] = useState(props.mode)
-    const [isDescription, setIsDescription] = useState(props.isDescription)
+    const [mount, setMount] = useState(false)
 
-    const { selectedId, setSelectedId } = useSurvey()
+    const [mode, setMode] = useState(props.mode)
+
+    const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
+
+    const [titleValue, setTitleValue] = useState(props.title)
+
+    const title = useDebounce(titleValue, 500)
 
     const isSelected = props._id === selectedId ? styles.containerItemSelected : ''
 
@@ -44,7 +57,7 @@ const QuestionsContainerItem = ({ ...props }) => {
         ]
     }, [])
 
-    const handleClick = event => {
+    const handleSelect = useCallback(event => {
 
         if (selectedId === props._id) return
 
@@ -54,7 +67,39 @@ const QuestionsContainerItem = ({ ...props }) => {
             block: 'center'
         })
 
-    }
+    }, [selectedId])
+
+    const handleDuplicate = useCallback(() => {
+        console.log('duplicate')
+    }, [])
+
+    const handleDelete = useCallback(() => {
+
+        survey.questions = survey.questions.filter(question => question._id != selectedId)
+
+        const selectedIndex = survey.questions.findIndex(question => question._id === selectedId)
+
+        setSelectedId(survey.questions.length ? survey.questions.at(selectedIndex)._id : null)
+
+        setSurvey({ ...survey })
+
+    }, [selectedId, survey])
+
+    useEffect(() => {
+        if (!mount) setMount(true)
+    }, [mount])
+
+    useEffect(() => {
+
+        if (!mount) return
+
+        const question = survey.questions.find(question => question._id === selectedId)
+
+        question.title = title
+
+        setSurvey({ ...survey })
+
+    }, [title])
 
     return (
         <Draggable
@@ -73,11 +118,11 @@ const QuestionsContainerItem = ({ ...props }) => {
                 }
 
                 return (
-                    <form
+                    <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         style={style}
-                        onClick={handleClick}
+                        onClick={handleSelect}
                         className={cn(styles.containerItem, isActive, isSelected, styles.block)}
                     >
                         <div
@@ -89,15 +134,9 @@ const QuestionsContainerItem = ({ ...props }) => {
                         <Input
                             name="title"
                             label="Tytuł pytania"
+                            onChange={value => setTitleValue(value)}
                             defaultValue={props.title}
                         />
-                        {isDescription && <div className={styles.containerItemQuestion}>
-                            <Input
-                                name="description"
-                                label="Opis pytania"
-                                defaultValue={props.description}
-                            />
-                        </div>}
                         <Fields mode={mode} fields={props.fields} />
                         <div className={styles.containerItemSettings}>
                             <Select
@@ -108,19 +147,26 @@ const QuestionsContainerItem = ({ ...props }) => {
                                 status={mode}
                                 setStatus={setMode}
                             />
-                            <Switch
-                                name="isDescription"
-                                label="Opis"
-                                status={isDescription}
-                                setStatus={setIsDescription}
-                            />
+
+                            <Tooltip text="Duplikuj pytanie">
+                                <SecondaryButton onClick={handleDuplicate}>
+                                    <BiDuplicate />
+                                </SecondaryButton>
+                            </Tooltip>
+
+                            <Tooltip text="Usuń pytanie">
+                                <SecondaryButton onClick={handleDelete}>
+                                    <BiTrashAlt />
+                                </SecondaryButton>
+                            </Tooltip>
+
                             <Switch
                                 name="isRequired"
                                 label="Wymagane"
                                 status={props.isRequired}
                             />
                         </div>
-                    </form>
+                    </div>
                 )
             }}
         </Draggable>

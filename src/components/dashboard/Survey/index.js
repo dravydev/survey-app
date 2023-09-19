@@ -15,11 +15,11 @@ const Survey = () => {
     const router = useRouter()
     const { survey } = useSurvey()
 
-    const [bookmark, setBookmark] = useState('editor')
+    const [bookmark, setBookmark] = useState('questions')
 
     const bookmarks = useMemo(() => {
         return {
-            editor: <Questions />,
+            questions: <Questions />,
             settings: <Settings />,
             stats: <Stats />
         }

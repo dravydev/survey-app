@@ -3,12 +3,36 @@ import styles from './fields.module.scss'
 import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
 
-const FieldsChoiceInsert = ({ ...props }) => {
+import generateHexId from '@/utils/generateHexId'
+
+import { useSurvey } from '@/hooks'
+import { useCallback } from 'react'
+
+const FieldsChoiceInsert = () => {
+
+    const { survey, setSurvey, selectedId } = useSurvey()
+
+    const handleInsert = useCallback(() => {
+
+        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
+
+        selectedQuestion.fields.push({
+            _id: generateHexId(24),
+            slug: 'nowa-opcja',
+            text: 'Nowa opcja',
+            type: 'select'
+        })
+
+        setSurvey({ ...survey })
+
+    }, [])
+
     return (
         <div className={cn(styles.choiceInsert, inter)}>
 
             <button
                 type="button"
+                onClick={handleInsert}
                 className={styles.choiceInsertButton}
             >
                 Dodaj opcję
@@ -18,6 +42,7 @@ const FieldsChoiceInsert = ({ ...props }) => {
 
             <button
                 type="button"
+                onClick={handleInsert}
                 className={styles.choiceInsertButton}
             >
                 Dodaj opcję &ldquo;Inne&rdquo;

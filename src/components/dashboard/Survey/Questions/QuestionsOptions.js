@@ -16,25 +16,29 @@ import cn from '@/utils/cn'
 import generateHexId from '@/utils/generateHexId'
 import inter from '@/assets/fonts/inter'
 
+import { updateSurveyQuestions } from '@/actions/surveys'
+
 import { useSurvey } from '@/hooks'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const QuestionsOptions = () => {
 
+    const [saved, setSaved] = useState(false)
+    const [mount, setMount] = useState(false)
     const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
 
     const handleAddQuestion = useCallback(() => {
 
         const surveyId = generateHexId(24)
-        
+
         const selectedIndex = survey.questions.findIndex(question => question._id === selectedId)
 
         survey.questions.splice(selectedIndex + 1, 0, {
             _id: surveyId,
-            isDescription: false,
             isRequired: true,
-            mode: 'shortAnswer',
-            title: 'Przykładowe pytanie'
+            title: 'Nowe pytanie',
+            fields: [],
+            mode: 'shortAnswer'
         })
 
         setSurvey({ ...survey })
@@ -42,11 +46,41 @@ const QuestionsOptions = () => {
 
     }, [selectedId])
 
-    const handleSave = useCallback(() => {
+    const handleSave = useCallback(async () => {
 
-        console.log(survey)
+        const { error, data } = await updateSurveyQuestions(
+            { surveyId: survey._id },
+            {
+                questions: survey.questions.map(question => {
+                    return {
+                        title: question.title,
+                        mode: question.mode,
+                        isRequired: question.isRequired,
+                        fields: question.fields.map(field => ({
+                            type: field.type,
+                            text: field.text
+                        }))
+                    }
+                })
+            }
+        )
 
-    }, [])
+        console.log(error, data)
+
+        setSaved(false)
+
+    }, [survey])
+
+    useEffect(() => {
+
+        if (!mount) {
+            setMount(true)
+            return
+        }
+
+        setSaved(true)
+
+    }, [survey])
 
     return (
         <div className={styles.options}>
@@ -68,7 +102,10 @@ const QuestionsOptions = () => {
                 <span>Udostępnij</span>
             </SecondaryButton>
 
-            <PrimaryButton onClick={handleSave}>
+            <PrimaryButton
+                onClick={handleSave}
+                disabled={!saved}
+            >
                 <CgCheckO />
                 <span>Zapisz</span>
             </PrimaryButton>

@@ -8,7 +8,7 @@ const FieldsChoice = ({ ...props }) => {
     return (
         <div className={styles.choice}>
             <FieldsChoiceMode text={props.text} />
-            {props.fields && <div>
+            {props.mode.endsWith('Choice') && <div>
                 {props.fields.map(field => <FieldsChoiceItem key={field._id} mode={props.mode} {...field} />)}
                 <FieldsChoiceInsert />
             </div>}

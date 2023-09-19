@@ -50,8 +50,6 @@ const createSurvey = async (req, res) => {
         questions: [
             {
                 title: 'Przykładowe pytanie - wybierz opcje',
-                description: null,
-                isDescription: false,
                 isRequired: true,
                 mode: 'singleChoice',
                 fields: [
