@@ -23,7 +23,7 @@ const saveSurvey = async (req, res) => {
 
     const validator = schema.validate({ ...req.query, ...req.body })
 
-    console.log(validator)
+    console.log(validator.value)
 
     if (validator.error) {
 
@@ -53,8 +53,6 @@ const saveSurvey = async (req, res) => {
             questions: questions
         }
     )
-
-    console.log(survey)
 
     res.json({ survey: 'XDDDDDDD' })
 

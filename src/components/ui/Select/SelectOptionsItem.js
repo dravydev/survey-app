@@ -8,14 +8,14 @@ import inter from '@/assets/fonts/inter'
 const SelectOptionsItem = ({ ...props }) => {
 
     const handleOption = useCallback(() => {
+
         props.setOption({
             value: props.value,
             text: props.text
         })
 
         props.handleClose()
-
-        if (props.setStatus) props.setStatus(props.value)
+        if (props.onSelect) props.onSelect(props.value)
 
     }, [props.status, props.value])
 

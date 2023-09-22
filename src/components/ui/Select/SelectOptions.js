@@ -34,8 +34,7 @@ const SelectOptions = ({ ...props }) => {
                 key={option.value}
                 setOption={props.setOption}
                 handleClose={handleClose}
-                status={props.status}
-                setStatus={props.setStatus}
+                onSelect={props.onSelect}
                 {...option}
             />
             )}

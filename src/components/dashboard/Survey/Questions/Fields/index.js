@@ -2,9 +2,18 @@ import styles from './fields.module.scss'
 
 import FieldsChoice from './FieldsChoice'
 
+import { useSurvey } from '@/hooks'
 import { useMemo } from 'react'
 
-const Fields = ({ ...props }) => {
+const Fields = () => {
+
+    const { survey, selectedId } = useSurvey()
+
+    const selectedQuestion = useMemo(() => {
+
+        return survey.questions.find(question => question._id === selectedId)
+
+    }, [survey, selectedId])
 
     const modes = useMemo(() => {
         return {
@@ -18,9 +27,9 @@ const Fields = ({ ...props }) => {
     return (
         <div className={styles.root}>
             <FieldsChoice
-                mode={props.mode}
-                text={modes[props.mode]}
-                fields={props.fields}
+                mode={selectedQuestion.mode}
+                text={modes[selectedQuestion.mode]}
+                fields={selectedQuestion.fields}
             />
         </div>
     )

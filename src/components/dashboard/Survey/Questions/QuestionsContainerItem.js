@@ -26,8 +26,6 @@ const QuestionsContainerItem = ({ ...props }) => {
 
     const [mount, setMount] = useState(false)
 
-    const [mode, setMode] = useState(props.mode)
-
     const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
 
     const [titleValue, setTitleValue] = useState(props.title)
@@ -57,7 +55,7 @@ const QuestionsContainerItem = ({ ...props }) => {
         ]
     }, [])
 
-    const handleSelect = useCallback(event => {
+    const handleSelectQuestion = useCallback(event => {
 
         if (selectedId === props._id) return
 
@@ -68,6 +66,18 @@ const QuestionsContainerItem = ({ ...props }) => {
         })
 
     }, [selectedId])
+
+    const handleSelect = useCallback(value => {
+        
+        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
+
+        selectedQuestion.mode = value
+
+        if (!value.endsWith('Choice')) selectedQuestion.fields = []
+
+        setSurvey({ ...survey })
+
+    }, [selectedId, survey])
 
     const handleDuplicate = useCallback(() => {
         console.log('duplicate')
@@ -93,9 +103,9 @@ const QuestionsContainerItem = ({ ...props }) => {
 
         if (!mount) return
 
-        const question = survey.questions.find(question => question._id === selectedId)
+        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
 
-        question.title = title
+        selectedQuestion.title = title
 
         setSurvey({ ...survey })
 
@@ -122,7 +132,7 @@ const QuestionsContainerItem = ({ ...props }) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         style={style}
-                        onClick={handleSelect}
+                        onClick={handleSelectQuestion}
                         className={cn(styles.containerItem, isActive, isSelected, styles.block)}
                     >
                         <div
@@ -137,15 +147,15 @@ const QuestionsContainerItem = ({ ...props }) => {
                             onChange={value => setTitleValue(value)}
                             defaultValue={props.title}
                         />
-                        <Fields mode={mode} fields={props.fields} />
+                        <Fields />
                         <div className={styles.containerItemSettings}>
+                            
                             <Select
                                 label="Rodzaj"
                                 name="mode"
                                 index={modes.findIndex(mode => mode.value == props.mode)}
                                 options={modes.map(mode => ({ value: mode.value, text: mode.text }))}
-                                status={mode}
-                                setStatus={setMode}
+                                onSelect={handleSelect}
                             />
 
                             <Tooltip text="Duplikuj pytanie">
@@ -165,6 +175,7 @@ const QuestionsContainerItem = ({ ...props }) => {
                                 label="Wymagane"
                                 status={props.isRequired}
                             />
+
                         </div>
                     </div>
                 )

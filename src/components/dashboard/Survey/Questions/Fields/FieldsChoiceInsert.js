@@ -18,14 +18,13 @@ const FieldsChoiceInsert = () => {
 
         selectedQuestion.fields.push({
             _id: generateHexId(24),
-            slug: 'nowa-opcja',
             text: 'Nowa opcja',
             type: 'select'
         })
 
         setSurvey({ ...survey })
 
-    }, [])
+    }, [selectedId, survey])
 
     return (
         <div className={cn(styles.choiceInsert, inter)}>

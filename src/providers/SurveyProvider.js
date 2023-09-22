@@ -27,7 +27,7 @@ const SurveyProvider = ({ children }) => {
                 return
             }
 
-            setSelectedId(data.survey.questions.at(0)._id)
+            setSelectedId(data.survey.questions.length ? data.survey.questions.at(0)._id : null)
             setSurvey(data.survey)
 
         }

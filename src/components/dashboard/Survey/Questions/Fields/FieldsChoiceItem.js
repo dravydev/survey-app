@@ -40,8 +40,6 @@ const FieldsChoiceItem = ({ ...props }) => {
 
         if (!mount) return
 
-        console.log('xd')
-
         const selectedQuestion = survey.questions.find(question => question._id === selectedId)
 
         const selectedField = selectedQuestion.fields.find(field => field._id === props._id)
@@ -61,7 +59,7 @@ const FieldsChoiceItem = ({ ...props }) => {
             <input
                 name="x"
                 defaultValue={props.text}
-                onChange={value => setTextValue(value)}
+                onChange={event => setTextValue(event.target.value)}
                 className={cn(styles.choiceItemInput, inter)}
             />
 

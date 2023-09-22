@@ -44,7 +44,7 @@
         }
 
         &Active {
-            opacity: .95;
+            background-color: rgb($foreground);
         }
 
         &Selected {
@@ -74,12 +74,5 @@
                 margin-right: auto;
             }
         }
-    }
-}
-
-@keyframes fromLeftToRight {
-    0% {
-        opacity: 0;
-        translate: -10%;
     }
 }

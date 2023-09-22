@@ -20,14 +20,14 @@ const Bookmarks = ({ ...props }) => {
                 icon: <BiEditAlt />
             },
             {
-                value: 'settings',
-                text: 'Ustawienia',
-                icon: <BiCog />
-            },
-            {
                 value: 'stats',
                 text: 'Statystyki',
                 icon: <BiStats />
+            },
+            {
+                value: 'settings',
+                text: 'Ustawienia',
+                icon: <BiCog />
             }
         ]
     }, [])
