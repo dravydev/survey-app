@@ -2,12 +2,7 @@ import styles from './surveys.module.scss'
 
 import {
     BiCalendar,
-    BiEdit,
-    BiGitCompare,
-    BiLinkExternal,
-    BiNoEntry,
-    BiSolidEyedropper,
-    BiStreetView
+    BiLinkExternal
 } from 'react-icons/bi'
 
 import cn from '@/utils/cn'

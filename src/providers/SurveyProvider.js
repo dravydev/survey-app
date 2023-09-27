@@ -11,6 +11,7 @@ const SurveyProvider = ({ children }) => {
 
     const [survey, setSurvey] = useState(null)
     const [selectedId, setSelectedId] = useState(null)
+    const [synchronization, setSynchronization] = useState(true)
 
     useEffect(() => {
 
@@ -32,16 +33,18 @@ const SurveyProvider = ({ children }) => {
 
         }
 
-        handleTakeSurvey()
+        if (surveyId) handleTakeSurvey()
 
-    }, [])
+    }, [router])
 
     return (
         <SurveyContext.Provider value={{
             survey,
             setSurvey,
             selectedId,
-            setSelectedId
+            setSelectedId,
+            synchronization,
+            setSynchronization
         }}>
             {children}
         </SurveyContext.Provider>

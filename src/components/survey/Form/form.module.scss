@@ -1,0 +1,29 @@
+@use "@/styles/keyframes";
+@use "@/styles/variables" as *;
+
+.root {
+    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-inline: 1rem;
+
+    button {
+        margin-right: auto;
+    }
+}
+
+.item {
+    padding: 1.5rem;
+    border-radius: .5rem;
+    border: 1px solid rgb($foreground);
+
+    &Error {
+        animation: shake 0.5s;
+        border-color: rgb($red);
+    }
+    &Question {
+        font-weight: 500;
+        font-size: .975rem;
+    }
+}

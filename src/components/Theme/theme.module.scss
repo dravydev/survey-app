@@ -1,0 +1,24 @@
+@use "@/styles/variables" as *;
+
+.root {
+    cursor: pointer;
+    right: 2.5rem;
+    bottom: 2.5rem;
+    padding: .75rem;
+    position: fixed;
+    border-radius: 50%;
+    display: grid;
+    border: 1px solid rgb($foreground);
+    box-shadow: 0 0 1rem .2rem rgb($foreground);
+
+    svg {
+        font-size: 1.25rem;
+        animation: loadIcon .25s;
+    }
+}
+
+@keyframes loadIcon {
+    50% {
+        scale: .75;
+    }
+}

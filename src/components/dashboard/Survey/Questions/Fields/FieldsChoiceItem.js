@@ -10,7 +10,7 @@ import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
 
 import { useDebounce, useSurvey } from '@/hooks'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 
 const FieldsChoiceItem = ({ ...props }) => {
 
@@ -22,15 +22,17 @@ const FieldsChoiceItem = ({ ...props }) => {
 
     const text = useDebounce(textValue, 500)
 
-    const handleDelete = useCallback(() => {
+    const selectedQuestion = useMemo(() => {
+        return survey.questions.find(question => question._id === selectedId)
+    }, [selectedId])
 
-        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
+    const handleDelete = useCallback(() => {
 
         selectedQuestion.fields = selectedQuestion.fields.filter(field => field._id != props._id)
 
         setSurvey({ ...survey })
 
-    }, [selectedId])
+    }, [])
 
     useEffect(() => {
         if (!mount) setMount(true)
@@ -39,8 +41,6 @@ const FieldsChoiceItem = ({ ...props }) => {
     useEffect(() => {
 
         if (!mount) return
-
-        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
 
         const selectedField = selectedQuestion.fields.find(field => field._id === props._id)
 
@@ -57,20 +57,23 @@ const FieldsChoiceItem = ({ ...props }) => {
                 styles['choiceItemBullet' + (props.mode === 'singleChoice' ? 'Circle' : 'Square')]
             )} />
             <input
-                name="x"
+                data-id={props._id}
                 defaultValue={props.text}
+                minLength={1}
+                maxLength={32}
                 onChange={event => setTextValue(event.target.value)}
                 className={cn(styles.choiceItemInput, inter)}
+                required
             />
 
-            <Tooltip text="Usuń opcję" direction="right">
+            {(selectedQuestion.fields.length > 1) && <Tooltip text="Usuń opcję" direction="right">
                 <button
                     onClick={handleDelete}
                     className={styles.choiceItemDelete}
                 >
                     <BiTrash />
                 </button>
-            </Tooltip>
+            </Tooltip>}
 
         </div>
     )

@@ -6,27 +6,37 @@ import inter from '@/assets/fonts/inter'
 import generateHexId from '@/utils/generateHexId'
 
 import { useSurvey } from '@/hooks'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 const FieldsChoiceInsert = () => {
 
     const { survey, setSurvey, selectedId } = useSurvey()
 
-    const handleInsert = useCallback(() => {
+    const selectedQuestion = useMemo(() => {
+        return survey.questions.find(question => question._id === selectedId)
+    }, [selectedId])
 
-        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
+    const handleInsert = useCallback(async () => {
+
+        const fieldId = generateHexId(24)
 
         selectedQuestion.fields.push({
-            _id: generateHexId(24),
+            _id: fieldId,
             text: 'Nowa opcja',
             type: 'select'
         })
 
-        setSurvey({ ...survey })
+        await setSurvey({ ...survey })
 
-    }, [selectedId, survey])
+        const input = document.querySelector(`[data-id="${fieldId}"]`)
 
-    return (
+        console.log(input)
+
+        input.select()
+
+    }, [survey])
+
+    if (selectedQuestion.fields.length < 10) return (
         <div className={cn(styles.choiceInsert, inter)}>
 
             <button
@@ -35,16 +45,6 @@ const FieldsChoiceInsert = () => {
                 className={styles.choiceInsertButton}
             >
                 Dodaj opcję
-            </button>
-
-            <span className={styles.choiceInsertText}>lub</span>
-
-            <button
-                type="button"
-                onClick={handleInsert}
-                className={styles.choiceInsertButton}
-            >
-                Dodaj opcję &ldquo;Inne&rdquo;
             </button>
 
         </div>

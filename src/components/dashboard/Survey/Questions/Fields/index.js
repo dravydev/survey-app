@@ -5,15 +5,15 @@ import FieldsChoice from './FieldsChoice'
 import { useSurvey } from '@/hooks'
 import { useMemo } from 'react'
 
-const Fields = () => {
+const Fields = ({ ...props }) => {
 
-    const { survey, selectedId } = useSurvey()
+    const { survey } = useSurvey()
 
     const selectedQuestion = useMemo(() => {
 
-        return survey.questions.find(question => question._id === selectedId)
+        return survey.questions.find(question => question._id === props.questionId)
 
-    }, [survey, selectedId])
+    }, [survey])
 
     const modes = useMemo(() => {
         return {

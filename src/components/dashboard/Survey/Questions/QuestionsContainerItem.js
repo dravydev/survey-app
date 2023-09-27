@@ -83,6 +83,16 @@ const QuestionsContainerItem = ({ ...props }) => {
         console.log('duplicate')
     }, [])
 
+    const handleRequired = useCallback(status => {
+
+        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
+
+        selectedQuestion.isRequired = status
+
+        setSurvey({ ...survey })
+
+    }, [])
+
     const handleDelete = useCallback(() => {
 
         survey.questions = survey.questions.filter(question => question._id != selectedId)
@@ -144,10 +154,13 @@ const QuestionsContainerItem = ({ ...props }) => {
                         <Input
                             name="title"
                             label="Tytuł pytania"
+                            minLength={3}
+                            maxLength={64}
                             onChange={value => setTitleValue(value)}
                             defaultValue={props.title}
+                            required
                         />
-                        <Fields />
+                        <Fields questionId={props._id} />
                         <div className={styles.containerItemSettings}>
                             
                             <Select
@@ -174,6 +187,7 @@ const QuestionsContainerItem = ({ ...props }) => {
                                 name="isRequired"
                                 label="Wymagane"
                                 status={props.isRequired}
+                                onSwitch={handleRequired}
                             />
 
                         </div>

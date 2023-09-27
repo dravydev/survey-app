@@ -32,7 +32,7 @@ const takeSurvey = async (req, res) => {
         return
     }
 
-    const { user } = await getServerSession(req, res, authOptions)
+    // const { user } = await getServerSession(req, res, authOptions)
 
     const { surveyId } = validator.value
 
@@ -40,8 +40,7 @@ const takeSurvey = async (req, res) => {
 
     const survey = await Survey.findOne(
         {
-            _id: surveyId,
-            ownerId: user.id
+            _id: surveyId
         },
         {
             title: 1,

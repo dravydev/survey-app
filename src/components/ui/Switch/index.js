@@ -11,7 +11,7 @@ const Switch = ({ ...props }) => {
 
     const handleSwitch = () => {
         setStatus(!status)
-        if (props.setStatus) props.setStatus(!status)
+        if (props.onSwitch) props.onSwitch(!status)
     }
 
     const isActive = status ? styles.rootActive : ''

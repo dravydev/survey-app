@@ -10,9 +10,10 @@ const sendRequest = async props => {
             abortController.abort()
         }, props.timeout)
 
+
         const request = await axios({
             method: props.method,
-            url: '/api' + props.path,
+            url: props.url || ('/api' + props.path),
             signal: abortController.signal,
             headers: {
                 'Content-Type': 'application/json'

@@ -16,16 +16,12 @@ import cn from '@/utils/cn'
 import generateHexId from '@/utils/generateHexId'
 import inter from '@/assets/fonts/inter'
 
-import { updateSurveyQuestions } from '@/actions/surveys'
-
 import { useSurvey } from '@/hooks'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 const QuestionsOptions = () => {
 
-    const [saved, setSaved] = useState(false)
-    const [mount, setMount] = useState(false)
-    const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
+    const { survey, setSurvey, selectedId, setSelectedId, synchronization } = useSurvey()
 
     const handleAddQuestion = useCallback(() => {
 
@@ -46,48 +42,15 @@ const QuestionsOptions = () => {
 
     }, [selectedId])
 
-    const handleSave = useCallback(async () => {
-
-        const { error, data } = await updateSurveyQuestions(
-            { surveyId: survey._id },
-            {
-                questions: survey.questions.map(question => {
-                    return {
-                        title: question.title,
-                        mode: question.mode,
-                        isRequired: question.isRequired,
-                        fields: question.fields.map(field => ({
-                            type: field.type,
-                            text: field.text
-                        }))
-                    }
-                })
-            }
-        )
-
-        console.log(error, data)
-
-        setSaved(false)
-
-    }, [survey])
-
-    useEffect(() => {
-
-        if (!mount) {
-            setMount(true)
-            return
-        }
-
-        setSaved(true)
-
-    }, [survey])
-
     return (
         <div className={styles.options}>
 
             <h2 className={cn(styles.optionsTitle, inter)}>{survey.title}</h2>
 
-            <SecondaryButton onClick={handleAddQuestion}>
+            <SecondaryButton
+                onClick={handleAddQuestion}
+                type="button"
+            >
                 <CgMathPlus />
                 <span>Pytanie</span>
             </SecondaryButton>
@@ -102,10 +65,7 @@ const QuestionsOptions = () => {
                 <span>Udostępnij</span>
             </SecondaryButton>
 
-            <PrimaryButton
-                onClick={handleSave}
-                disabled={!saved}
-            >
+            <PrimaryButton disabled={synchronization}>
                 <CgCheckO />
                 <span>Zapisz</span>
             </PrimaryButton>

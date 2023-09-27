@@ -82,9 +82,52 @@ const updateSurveyQuestions = async (params, data) => {
 
 }
 
+const takeSurveysPaths = async () => {
+
+    const response = await sendRequest({
+        method: 'get',
+        path: '/surveys/takeSurveysPaths',
+        timeout: 5_000
+    })
+
+    if (response?.data?.error) return {
+        error: response.data.details
+    }
+
+    return {
+        data: {
+            surveys: response.data.surveys
+        }
+    }
+
+}
+
+const completeSurvey = async (params, data) => {
+
+    const response = await sendRequest({
+        method: 'post',
+        path: '/surveys/completeSurvey?surveyId=' + params.surveyId,
+        timeout: 5_000,
+        data: data
+    })
+
+    if (response?.data?.error) return {
+        error: response.data.details
+    }
+
+    return {
+        data: {
+            complete: response.data.complete
+        }
+    }
+
+}
+
 export {
     createSurvey,
     takeSurveys,
     takeSurvey,
-    updateSurveyQuestions
+    updateSurveyQuestions,
+    takeSurveysPaths,
+    completeSurvey
 }

@@ -49,24 +49,50 @@ const createSurvey = async (req, res) => {
         description: description,
         questions: [
             {
-                title: 'Przykładowe pytanie - wybierz opcje',
+                title: 'Imię i nazwisko',
+                isRequired: true,
+                mode: 'shortAnswer',
+                fields: []
+            },
+            {
+                title: 'Jakie preferencje kolorów?',
+                isRequired: false,
+                mode: 'multipleChoice',
+                fields: [
+                    {
+                        slug: 'bialy',
+                        text: 'Biały'
+                    },
+                    {
+                        slug: 'czarny',
+                        text: 'Czarny'
+                    },
+                    {
+                        slug: 'szary',
+                        text: 'Szary'
+                    },
+                    {
+                        slug: 'czerwony',
+                        text: 'Czerwony'
+                    },
+                    {
+                        slug: 'zielony',
+                        text: 'Zielony'
+                    }
+                ]
+            },
+            {
+                title: 'Tak czy nie?',
                 isRequired: true,
                 mode: 'singleChoice',
                 fields: [
                     {
-                        type: 'select',
-                        slug: 'opcja-1',
-                        text: 'Opcja 1'
+                        slug: 'tak',
+                        text: 'Tak'
                     },
                     {
-                        type: 'select',
-                        slug: 'opcja-2',
-                        text: 'Opcja 2'
-                    },
-                    {
-                        type: 'select',
-                        slug: 'opcja-3',
-                        text: 'Opcja 3'
+                        slug: 'nie',
+                        text: 'Nie'
                     }
                 ]
             }

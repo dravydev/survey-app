@@ -3,9 +3,10 @@ import { Schema, model, models } from 'mongoose'
 const fieldSchema = new Schema({
     _id: {
         type: Schema.Types.ObjectId,
+        unique: true,
         auto: true
     },
-    type: {
+    slug: {
         type: String,
         required: true
     },
@@ -18,6 +19,7 @@ const fieldSchema = new Schema({
 const questionSchema = new Schema({
     _id: {
         type: Schema.Types.ObjectId,
+        unique: true,
         auto: true
     },
     title: {
@@ -32,12 +34,23 @@ const questionSchema = new Schema({
         type: Boolean,
         required: true,
     },
-    fields: [fieldSchema]
+    fields: {
+        type: [fieldSchema],
+        validate: {
+            validator: fields => {
+
+                const slugs = new Set(fields.map(field => field.slug))
+
+                return slugs.size === fields.length
+            }
+        }
+    }
 })
 
 const surveySchema = new Schema({
     _id: {
         type: Schema.Types.ObjectId,
+        unique: true,
         auto: true
     },
     title: {

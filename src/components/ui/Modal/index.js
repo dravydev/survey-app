@@ -8,7 +8,7 @@ import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
 
 import { useOutsideClick } from '@/hooks'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 const Modal = ({ children, ...props }) => {
 
@@ -28,6 +28,14 @@ const Modal = ({ children, ...props }) => {
     }, [wrapperRef])
 
     useOutsideClick(wrapperRef, handleUnload)
+
+    useEffect(() => {
+
+        document.body.classList.add('locked')
+
+        return () => document.body.classList.remove('locked')
+
+    }, [])
 
     return (
         <div className={styles.root}>

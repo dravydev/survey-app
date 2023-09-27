@@ -1,21 +1,20 @@
 import styles from './survey.module.scss'
 
 import Bookmarks from './Bookmarks'
-
 import Questions from './Questions'
 import Settings from './Settings'
 import Stats from './Stats'
 
 import { useSurvey } from '@/hooks'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 
 const Survey = () => {
 
+    const mountRef = useRef(false)
     const router = useRouter()
-    const { survey } = useSurvey()
-
     const [bookmark, setBookmark] = useState('questions')
+    const { survey, setSynchronization } = useSurvey()
 
     const bookmarks = useMemo(() => {
         return {
@@ -30,6 +29,16 @@ const Survey = () => {
         if (!survey) return
 
         if (!Object.keys(survey).length) router.push('/dashboard')
+
+    }, [survey])
+
+    useEffect(() => {
+
+        if (!survey) return
+
+        mountRef.current
+            ? setSynchronization(false)
+            : mountRef.current = true
 
     }, [survey])
 
