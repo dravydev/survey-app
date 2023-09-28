@@ -75,7 +75,6 @@ const validateAnswers = (answers, questions) => {
 
             if (answer.mode != question.mode) return false
 
-            console.log(question.fields)
 
         }
 
@@ -103,8 +102,6 @@ const takeSurvey = async (req, res) => {
     }
 
     const { surveyId, recaptchaToken, answers } = validator.value
-
-    console.log('answers', answers)
 
     const isVerified = await verifyRecaptcha(recaptchaToken)
 
@@ -139,6 +136,21 @@ const takeSurvey = async (req, res) => {
 
         return
     }
+
+    const ipAddress = req.headers['x-real-ip'] ?? '127.0.0.1'
+
+    console.log(ipAddress)
+
+    // await Survey.updateOne(
+    //     {
+    //         _id: surveyId,
+    //         ownerId: user.id
+    //     },
+    //     {
+    //         questions: questions
+    //     },
+    //     { runValidators: true }
+    // )
 
     res.json({ complete: true })
 

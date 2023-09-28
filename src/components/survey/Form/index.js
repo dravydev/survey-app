@@ -8,13 +8,12 @@ import { completeSurvey } from '@/actions/surveys'
 
 import { useSurvey } from '@/hooks'
 import { useReCaptcha } from 'next-recaptcha-v3'
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 
 const Questions = () => {
 
     const { survey } = useSurvey()
     const { executeRecaptcha } = useReCaptcha()
-    const questionsRefs = survey.questions.map(() => useRef())
 
     const handleForm = useCallback(async event => {
 
@@ -30,13 +29,15 @@ const Questions = () => {
 
         }
 
-        questionsRefs.forEach(question => {
+        const questions = document.querySelectorAll(`.${styles.item}`)
 
-            const { id, mode, required } = question.current.dataset
+        questions.forEach(question => {
+
+            const { id, mode, required } = question.dataset
 
             if (mode.endsWith('Choice')) {
 
-                const fields = question.current.querySelectorAll('input')
+                const fields = question.querySelectorAll('input')
 
                 const fieldsChecked = Array.from(fields)
                     .filter(field => field.checked)
@@ -55,7 +56,7 @@ const Questions = () => {
 
             } else {
 
-                const field = question.current.querySelector(mode.startsWith('short') ? 'input' : 'textarea')
+                const field = question.querySelector(mode.startsWith('short') ? 'input' : 'textarea')
 
                 if (!field.value.length && required === 'true') {
                     showError(id)
@@ -94,7 +95,6 @@ const Questions = () => {
         >
             {survey.questions.map((question, index) => <FormItem
                 key={question._id}
-                questionRef={questionsRefs[index]}
                 {...question}
             />)}
             <PrimaryButton>

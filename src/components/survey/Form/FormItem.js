@@ -4,19 +4,21 @@ import Fields from './Fields'
 
 import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 
 const FormItem = ({ ...props }) => {
 
+    const itemRef = useRef()
+
     const handleDeleteError = useCallback(() => {
 
-        props.questionRef.current.classList.remove(styles.itemError)
+        itemRef.current.classList.remove(styles.itemError)
 
-    }, [])
+    }, [itemRef])
 
     return (
         <div
-            ref={props.questionRef}
+            ref={itemRef}
             data-id={props._id}
             data-mode={props.mode}
             data-required={props.isRequired}
