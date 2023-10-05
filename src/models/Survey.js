@@ -50,23 +50,27 @@ const answerFieldSchema = new Schema({
         type: Schema.Types.ObjectId,
         auto: true
     },
-    slug: {
-        type: String,
+    questionId: {
+        type: Schema.Types.ObjectId,
         required: true
     },
-    text: {
+    values: {
+        type: Array,
+        required: false,
+    },
+    value: {
         type: String,
-        required: true
+        required: false,
     }
 })
 
 const answerSchema = new Schema({
+    _id: {
+        type: Schema.Types.ObjectId,
+        auto: true
+    },
     ipAddress: {
         type: String,
-        required: true
-    },
-    questionId: {
-        type: Schema.Types.ObjectId,
         required: true
     },
     fields: [answerFieldSchema],

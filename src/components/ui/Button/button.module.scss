@@ -1,3 +1,4 @@
+@use "@/styles/keyframes";
 @use "@/styles/variables" as *;
 
 .root {
@@ -20,6 +21,7 @@
 }
 
 .primary {
+    min-height: 40px;
     color: rgb(255, 255, 255);
     background-color: rgb($main);
     transition: background-color .25s;
@@ -27,11 +29,15 @@
     &:hover {
         background-color: rgba($main, .9);
     }
-
+    
     &:disabled {
         cursor: not-allowed;
         color: rgb($primary);
         background-color: rgb($foreground);
+    }
+
+    &Loading svg {
+        animation: spinner 1s infinite;
     }
 }
 
@@ -42,5 +48,10 @@
     &:hover {
         color: rgb($background);
         background-color: rgb($primary);
+    }   
+    
+    &:disabled {
+        cursor: not-allowed;
+        opacity: .5;
     }
 }

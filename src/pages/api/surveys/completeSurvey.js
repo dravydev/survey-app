@@ -1,6 +1,8 @@
 import Joi from 'joi'
 import Survey from '@/models/Survey'
 
+import AsyncLock from 'async-lock'
+
 import verifyRecaptcha from '@/utils/verifyRecaptcha'
 
 const schema = Joi.object({
@@ -74,6 +76,7 @@ const validateAnswers = (answers, questions) => {
         if (answer) {
 
             if (answer.mode != question.mode) return false
+            // todo czy zgadza sie ields answer z question
 
 
         }
@@ -84,7 +87,9 @@ const validateAnswers = (answers, questions) => {
 
 }
 
-const takeSurvey = async (req, res) => {
+const lock = new AsyncLock({ timeout: 5000 })
+
+const completeSurvey = async (req, res) => {
 
     const validator = schema.validate({ ...req.query, ...req.body })
 
@@ -103,57 +108,87 @@ const takeSurvey = async (req, res) => {
 
     const { surveyId, recaptchaToken, answers } = validator.value
 
-    const isVerified = await verifyRecaptcha(recaptchaToken)
+    await lock.acquire(surveyId, async () => {
 
-    if (!isVerified) {
+        const isVerified = await verifyRecaptcha(recaptchaToken)
 
-        res.json({
-            error: true,
-            details: {
-                reason: 'VerificationError',
-                message: 'Błąd weryfikacji captcha, spróbuj ponownie'
+        if (!isVerified) {
+
+            res.json({
+                error: true,
+                details: {
+                    reason: 'VerificationError',
+                    message: 'Błąd weryfikacji captcha, spróbuj ponownie'
+                }
+            })
+
+            return
+        }
+
+        const survey = await Survey.findById(surveyId, {
+            questions: 1,
+            answers: {
+                ipAddress: 1
             }
         })
 
-        return
-    }
+        const isValid = validateAnswers(answers, survey.questions)
 
-    const survey = await Survey.findById(surveyId, {
-        questions: 1
+        if (!isValid) {
+
+            res.json({
+                error: true,
+                details: {
+                    reason: 'ValidationError',
+                    message: 'Nieprawidłowe dane, spróbuj ponownie'
+                }
+            })
+
+            return
+        }
+
+        const ipAddress = req.headers['x-real-ip'] ?? '127.0.0.1'
+
+        const ipAddressExists = survey.answers.some(answer => answer.ipAddress == ipAddress)
+
+        // if (ipAddressExists) {
+
+        //     res.json({
+        //         error: true,
+        //         details: {
+        //             reason: 'AlreadyCompletedError',
+        //             message: 'Już rozwiązałeś te ankietę'
+        //         }
+        //     })
+
+        //     return
+        // }
+
+        await Survey.updateOne(
+            {
+                _id: surveyId
+            },
+            {
+                $push: {
+                    answers: {
+                        ipAddress: ipAddress,
+                        fields: answers.map(answer => {
+                            return {
+                                questionId: answer._id,
+                                value: answer.value,
+                                values: answer.values
+                            }
+                        })
+                    }
+                }
+            },
+            { runValidators: true }
+        )
+
+        res.json({ complete: true })
+
     })
-
-    const isValid = validateAnswers(answers, survey.questions)
-
-    if (!isValid) {
-
-        res.json({
-            error: true,
-            details: {
-                reason: 'ValidationError',
-                message: 'Nieprawidłowe dane, spróbuj ponownie'
-            }
-        })
-
-        return
-    }
-
-    const ipAddress = req.headers['x-real-ip'] ?? '127.0.0.1'
-
-    console.log(ipAddress)
-
-    // await Survey.updateOne(
-    //     {
-    //         _id: surveyId,
-    //         ownerId: user.id
-    //     },
-    //     {
-    //         questions: questions
-    //     },
-    //     { runValidators: true }
-    // )
-
-    res.json({ complete: true })
 
 }
 
-export default takeSurvey
+export default completeSurvey

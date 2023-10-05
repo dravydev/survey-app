@@ -25,7 +25,7 @@ const FormItem = ({ ...props }) => {
             className={styles.item}
             onClick={handleDeleteError}
         >
-            <span className={cn(styles.itemQuestion, inter)}>{props.title}</span>
+            <span className={cn(styles.itemTitle, inter)}>{props.title}</span>
             <Fields
                 name={props._id}
                 mode={props.mode}

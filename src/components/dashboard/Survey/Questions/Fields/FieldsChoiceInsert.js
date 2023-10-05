@@ -8,13 +8,13 @@ import generateHexId from '@/utils/generateHexId'
 import { useSurvey } from '@/hooks'
 import { useCallback, useMemo } from 'react'
 
-const FieldsChoiceInsert = () => {
+const FieldsChoiceInsert = ({ ...props }) => {
 
-    const { survey, setSurvey, selectedId } = useSurvey()
+    const { survey, setSurvey } = useSurvey()
 
     const selectedQuestion = useMemo(() => {
-        return survey.questions.find(question => question._id === selectedId)
-    }, [selectedId])
+        return survey.questions.find(question => question._id === props.questionId)
+    }, [props.questionId])
 
     const handleInsert = useCallback(async () => {
 
@@ -22,17 +22,14 @@ const FieldsChoiceInsert = () => {
 
         selectedQuestion.fields.push({
             _id: fieldId,
-            text: 'Nowa opcja',
-            type: 'select'
+            text: 'Nowa opcja'
         })
 
         await setSurvey({ ...survey })
 
         const input = document.querySelector(`[data-id="${fieldId}"]`)
 
-        console.log(input)
-
-        input.select()
+        if (input) input.select()
 
     }, [survey])
 

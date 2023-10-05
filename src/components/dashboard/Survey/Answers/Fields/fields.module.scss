@@ -1,0 +1,28 @@
+@use "@/styles/variables" as *;
+
+.root {
+    margin-top: .75rem;
+
+    &Empty {
+        font-size: .925rem;
+    }
+}
+
+.group {
+    gap: .75rem;
+    display: flex;
+    flex-direction: column;
+
+    &Item {
+        padding: .75rem;
+        font-size: .925rem;
+        border-radius: .5rem;
+        background-color: rgba($foreground, .25);
+    }
+}
+
+.pieChart {
+    width: 20rem;
+    margin-inline: auto;
+    // background-color: red;
+}

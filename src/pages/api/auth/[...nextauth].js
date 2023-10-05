@@ -1,6 +1,3 @@
-import Survey from '@/models/Survey'
-import mongoConnect from '@/lib/mongoConnect'
-
 import NextAuth from 'next-auth/next'
 import GithubProvider from 'next-auth/providers/github'
 

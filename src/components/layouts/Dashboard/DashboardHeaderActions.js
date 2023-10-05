@@ -3,8 +3,7 @@ import styles from './dashboard.module.scss'
 import {
     BiLogOut,
     BiMoon,
-    BiSun,
-    BiSearch
+    BiSun
 } from 'react-icons/bi'
 
 import { signOut } from 'next-auth/react'
@@ -17,13 +16,6 @@ const DashboardHeaderActions = () => {
 
     return (
         <div className={styles.headerActions}>
-
-            <button
-                onClick={() => signOut()}
-                className={styles.headerActionsItem}
-            >
-                <BiSearch />
-            </button>
 
             <button
                 onClick={() => setTheme(theme == 'light' ? 'dark' : 'light')}

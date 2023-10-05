@@ -3,6 +3,7 @@ import '@/styles/progress.scss'
 
 import { ThemeProvider } from 'next-themes'
 import { SessionProvider } from 'next-auth/react'
+import { Toaster } from 'react-hot-toast'
 
 import NProgress from 'nprogress'
 import Router from 'next/router'
@@ -28,6 +29,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
           <Component {...pageProps} />
         </Layout>
       </SessionProvider>
+      <Toaster />
     </ThemeProvider>
   )
 }

@@ -10,9 +10,9 @@ import Fields from './Fields'
 import { PiDotsSix } from 'react-icons/pi'
 
 import cn from '@/utils/cn'
+import generateHexId from '@/utils/generateHexId'
 
 import {
-    BiDuplicate,
     BiTrashAlt
 } from 'react-icons/bi'
 
@@ -20,11 +20,11 @@ import { SecondaryButton } from '@/components/ui/Button'
 
 import { Draggable } from 'react-beautiful-dnd'
 import { useDebounce, useSurvey } from '@/hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 
 const QuestionsContainerItem = ({ ...props }) => {
 
-    const [mount, setMount] = useState(false)
+    const mountRef = useRef(false)
 
     const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
 
@@ -55,6 +55,10 @@ const QuestionsContainerItem = ({ ...props }) => {
         ]
     }, [])
 
+    const selectedQuestion = useMemo(() => {
+        return survey.questions.find(question => question._id === props._id)
+    }, [props._id])
+
     const handleSelectQuestion = useCallback(event => {
 
         if (selectedId === props._id) return
@@ -68,30 +72,38 @@ const QuestionsContainerItem = ({ ...props }) => {
     }, [selectedId])
 
     const handleSelect = useCallback(value => {
-        
-        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
 
         selectedQuestion.mode = value
 
-        if (!value.endsWith('Choice')) selectedQuestion.fields = []
+        if (!value.endsWith('Choice')) {
 
+            selectedQuestion.fields = []
+
+        } else {
+
+            if (!selectedQuestion.fields.length) {
+
+                const fieldId = generateHexId(24)
+
+                selectedQuestion.fields.push({
+                    _id: fieldId,
+                    text: 'Nowa opcja'
+                })
+            }
+
+        }
+      
         setSurvey({ ...survey })
 
-    }, [selectedId, survey])
-
-    const handleDuplicate = useCallback(() => {
-        console.log('duplicate')
-    }, [])
+    }, [survey])
 
     const handleRequired = useCallback(status => {
-
-        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
 
         selectedQuestion.isRequired = status
 
         setSurvey({ ...survey })
 
-    }, [])
+    }, [survey])
 
     const handleDelete = useCallback(() => {
 
@@ -105,21 +117,19 @@ const QuestionsContainerItem = ({ ...props }) => {
 
     }, [selectedId, survey])
 
-    useEffect(() => {
-        if (!mount) setMount(true)
-    }, [mount])
 
     useEffect(() => {
 
-        if (!mount) return
-
-        const selectedQuestion = survey.questions.find(question => question._id === selectedId)
+        if (!mountRef.current) {
+            mountRef.current = true
+            return
+        }
 
         selectedQuestion.title = title
 
         setSurvey({ ...survey })
 
-    }, [title])
+    }, [title, mountRef])
 
     return (
         <Draggable
@@ -158,11 +168,12 @@ const QuestionsContainerItem = ({ ...props }) => {
                             maxLength={64}
                             onChange={value => setTitleValue(value)}
                             defaultValue={props.title}
+                            autoComplete="off"
                             required
                         />
                         <Fields questionId={props._id} />
                         <div className={styles.containerItemSettings}>
-                            
+
                             <Select
                                 label="Rodzaj"
                                 name="mode"
@@ -171,14 +182,8 @@ const QuestionsContainerItem = ({ ...props }) => {
                                 onSelect={handleSelect}
                             />
 
-                            <Tooltip text="Duplikuj pytanie">
-                                <SecondaryButton onClick={handleDuplicate}>
-                                    <BiDuplicate />
-                                </SecondaryButton>
-                            </Tooltip>
-
                             <Tooltip text="Usuń pytanie">
-                                <SecondaryButton onClick={handleDelete}>
+                                <SecondaryButton onClick={handleDelete} type="button">
                                     <BiTrashAlt />
                                 </SecondaryButton>
                             </Tooltip>

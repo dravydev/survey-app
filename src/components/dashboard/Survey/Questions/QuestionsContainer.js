@@ -24,27 +24,25 @@ const QuestionsContainer = () => {
     }, [survey])
 
     return (
-        <div className={styles.container}>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable
-                    getContainerForClone={true}
-                    droppableId="questions"
-                    direction="vertical"
-                >
+        <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable
+                getContainerForClone={true}
+                droppableId="questions"
+                direction="vertical"
+            >
 
-                    {provided => (
-                        <div ref={provided.innerRef}>
-                            {survey.questions.map((question, index) => <QuestionsContainerItem
-                                key={question._id}
-                                {...question}
-                                index={index}
-                            />)}
-                        </div>
-                    )}
+                {provided => (
+                    <div ref={provided.innerRef} className={styles.container}>
+                        {survey.questions.map((question, index) => <QuestionsContainerItem
+                            key={question._id}
+                            {...question}
+                            index={index}
+                        />)}
+                    </div>
+                )}
 
-                </Droppable>
-            </DragDropContext>
-        </div>
+            </Droppable>
+        </DragDropContext>
     )
 }
 

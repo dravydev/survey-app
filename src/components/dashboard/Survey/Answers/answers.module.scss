@@ -1,0 +1,18 @@
+@use "@/styles/variables" as *;
+
+.container {
+    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+
+    &Item {
+        padding: 1.5rem;
+        border-radius: .5rem;
+        border: 1px solid rgb($foreground);
+
+        &Title {
+            font-weight: 500;
+            font-size: 0.975rem;
+        }
+    }
+}

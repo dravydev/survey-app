@@ -1,9 +1,8 @@
 import styles from './bookmarks.module.scss'
 
 import {
-    BiCog,
     BiEditAlt,
-    BiStats
+    BiSelectMultiple
 } from 'react-icons/bi'
 
 import BookmarksItem from './BookmarksItem'
@@ -20,14 +19,9 @@ const Bookmarks = ({ ...props }) => {
                 icon: <BiEditAlt />
             },
             {
-                value: 'stats',
-                text: 'Statystyki',
-                icon: <BiStats />
-            },
-            {
-                value: 'settings',
-                text: 'Ustawienia',
-                icon: <BiCog />
+                value: 'answers',
+                text: 'Odpowiedzi',
+                icon: <BiSelectMultiple />
             }
         ]
     }, [])

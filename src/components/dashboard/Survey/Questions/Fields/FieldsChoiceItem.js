@@ -10,21 +10,21 @@ import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
 
 import { useDebounce, useSurvey } from '@/hooks'
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 
 const FieldsChoiceItem = ({ ...props }) => {
 
-    const [mount, setMount] = useState(false)
+    const mountRef = useRef(false)
 
-    const { survey, setSurvey, selectedId } = useSurvey()
+    const { survey, setSurvey } = useSurvey()
 
     const [textValue, setTextValue] = useState(props.text)
 
     const text = useDebounce(textValue, 500)
 
     const selectedQuestion = useMemo(() => {
-        return survey.questions.find(question => question._id === selectedId)
-    }, [selectedId])
+        return survey.questions.find(question => question._id === props.questionId)
+    }, [props.questionId])
 
     const handleDelete = useCallback(() => {
 
@@ -32,15 +32,14 @@ const FieldsChoiceItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
-    }, [])
-
-    useEffect(() => {
-        if (!mount) setMount(true)
-    }, [mount])
+    }, [survey])
 
     useEffect(() => {
 
-        if (!mount) return
+        if (!mountRef.current) {
+            mountRef.current = true
+            return
+        }
 
         const selectedField = selectedQuestion.fields.find(field => field._id === props._id)
 
@@ -48,7 +47,7 @@ const FieldsChoiceItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
-    }, [text])
+    }, [text, mountRef])
 
     return (
         <div className={styles.choiceItem}>
@@ -63,6 +62,7 @@ const FieldsChoiceItem = ({ ...props }) => {
                 maxLength={32}
                 onChange={event => setTextValue(event.target.value)}
                 className={cn(styles.choiceItemInput, inter)}
+                autoComplete="off"
                 required
             />
 

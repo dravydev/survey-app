@@ -5,6 +5,8 @@ import mongoConnect from '@/lib/mongoConnect'
 
 import { authOptions } from '../auth/[...nextauth]'
 
+import uniqueArray from '@/utils/uniqueArray'
+
 import slugify from '@/utils/slugify'
 import { getServerSession } from 'next-auth/next'
 
@@ -57,7 +59,7 @@ const saveSurvey = async (req, res) => {
 
     const validator = schema.validate({ ...req.query, ...req.body })
 
-    console.log(validator)
+    console.log(validator.value.questions.length)
 
     if (validator.error) {
 
@@ -76,13 +78,21 @@ const saveSurvey = async (req, res) => {
 
     const { surveyId, questions } = validator.value
 
-    await mongoConnect()
-
     questions.forEach(question => {
-        question.fields.forEach(field => {
-            field.slug = slugify(field.text)
-        })
+
+        if (question.fields) {
+
+            question.fields.forEach(field => {
+                field.slug = slugify(field.text)
+            })
+
+            question.fields = uniqueArray(question.fields, 'slug')
+
+        }
+
     })
+
+    await mongoConnect()
 
     await Survey.updateOne(
         {

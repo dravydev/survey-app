@@ -10,10 +10,8 @@ const Fields = ({ ...props }) => {
     const { survey } = useSurvey()
 
     const selectedQuestion = useMemo(() => {
-
         return survey.questions.find(question => question._id === props.questionId)
-
-    }, [survey])
+    }, [props.questionId])
 
     const modes = useMemo(() => {
         return {
@@ -27,6 +25,7 @@ const Fields = ({ ...props }) => {
     return (
         <div className={styles.root}>
             <FieldsChoice
+                questionId={props.questionId}
                 mode={selectedQuestion.mode}
                 text={modes[selectedQuestion.mode]}
                 fields={selectedQuestion.fields}

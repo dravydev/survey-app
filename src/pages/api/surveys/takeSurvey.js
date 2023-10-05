@@ -32,7 +32,7 @@ const takeSurvey = async (req, res) => {
         return
     }
 
-    // const { user } = await getServerSession(req, res, authOptions)
+    const session = await getServerSession(req, res, authOptions)
 
     const { surveyId } = validator.value
 
@@ -43,9 +43,13 @@ const takeSurvey = async (req, res) => {
             _id: surveyId
         },
         {
+            ownerId: 1,
             title: 1,
             description: 1,
-            questions: 1
+            questions: 1,
+            answers: {
+                fields: 1
+            }
         }
     )
 
@@ -62,7 +66,15 @@ const takeSurvey = async (req, res) => {
         return
     }
 
-    res.json({ survey })
+    res.json({
+        survey: {
+            _id: survey._id,
+            title: survey.title,
+            description: survey.description,
+            questions: survey.questions,
+            answers: session?.user?.id == survey.ownerId ? survey.answers : null
+        }
+    })
 
 }
 

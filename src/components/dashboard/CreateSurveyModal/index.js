@@ -8,28 +8,35 @@ import { createSurvey } from '@/actions/surveys'
 
 import { useSurveys } from '@/hooks'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 const CreateSurveyModal = ({ ...props }) => {
 
     const router = useRouter()
 
+    const [loading, setLoading] = useState(false)
     const { surveys, setSurveys } = useSurveys()
 
     const handleForm = useCallback(async event => {
 
         event.preventDefault()
 
+        if (loading) return
+
+        setLoading(true)
+
         const formData = new FormData(event.target)
 
         const { error, data } = await createSurvey(formData)
 
         if (error) {
-            console.log(error.message)
+            
+            setLoading(false)
+
             return
         }
 
-        setSurveys([
+        if (surveys) setSurveys([
             ...surveys,
             data.survey
         ])
@@ -41,6 +48,7 @@ const CreateSurveyModal = ({ ...props }) => {
     return (
         <Modal
             title="Tworzenie ankiety"
+            loading={loading}
             setModal={props.setModal}
         >
 
@@ -68,7 +76,7 @@ const CreateSurveyModal = ({ ...props }) => {
                     required
                 />
 
-                <PrimaryButton>
+                <PrimaryButton loading={loading}>
                     <span>Utwórz ankietę</span>
                 </PrimaryButton>
 

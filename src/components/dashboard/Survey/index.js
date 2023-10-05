@@ -1,9 +1,9 @@
 import styles from './survey.module.scss'
 
 import Bookmarks from './Bookmarks'
+
 import Questions from './Questions'
-import Settings from './Settings'
-import Stats from './Stats'
+import Answers from './Answers'
 
 import { useSurvey } from '@/hooks'
 import { useRouter } from 'next/router'
@@ -19,8 +19,7 @@ const Survey = () => {
     const bookmarks = useMemo(() => {
         return {
             questions: <Questions />,
-            settings: <Settings />,
-            stats: <Stats />
+            answers: <Answers />
         }
     }, [])
 
@@ -40,7 +39,7 @@ const Survey = () => {
             ? setSynchronization(false)
             : mountRef.current = true
 
-    }, [survey])
+    }, [survey, mountRef])
 
     if (!survey || !Object.keys(survey).length) return <h1>czekaj</h1>
 

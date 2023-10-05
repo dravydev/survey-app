@@ -16,6 +16,10 @@ const Modal = ({ children, ...props }) => {
 
     const handleUnload = useCallback(() => {
 
+        console.log(props.loading)
+
+        if (props.loading) return
+
         const wrapper = wrapperRef.current
 
         wrapper.classList.add(styles.rootWrapperUnload)
@@ -25,7 +29,7 @@ const Modal = ({ children, ...props }) => {
             props.setModal(false)
         }
 
-    }, [wrapperRef])
+    }, [wrapperRef, props.loading])
 
     useOutsideClick(wrapperRef, handleUnload)
 

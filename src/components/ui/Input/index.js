@@ -52,6 +52,7 @@ const Input = ({ ...props }) => {
                 required={props.required}
                 onChange={handleChange}
                 className={cn(styles.rootInput, inter)}
+                autoComplete={props.autoComplete}
             />
         </div>
     )

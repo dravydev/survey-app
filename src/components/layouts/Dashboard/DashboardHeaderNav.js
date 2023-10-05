@@ -26,7 +26,7 @@ const DashboardHeaderNav = () => {
                         }
                     ]}
                 />
-                <DashboardHeaderNavItem
+                {/* <DashboardHeaderNavItem
                     href="/dashboard/settings"
                     icon={<BiCog />}
                     text="Ustawienia"
@@ -35,11 +35,6 @@ const DashboardHeaderNav = () => {
                             path: '/dashboard/settings'
                         }
                     ]}
-                />
-                {/* <DashboardHeaderNavItem
-                    href="/dashboard"
-                    icon={<BiGridAlt />}
-                    text="Przegląd"
                 /> */}
             </ul>
         </nav>
