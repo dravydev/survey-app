@@ -108,7 +108,7 @@ const completeSurvey = async (req, res) => {
 
     const { surveyId, recaptchaToken, answers } = validator.value
 
-    await lock.acquire(surveyId, async () => {
+    // await lock.acquire(surveyId, async () => {
 
         const isVerified = await verifyRecaptcha(recaptchaToken)
 
@@ -187,7 +187,7 @@ const completeSurvey = async (req, res) => {
 
         res.json({ complete: true })
 
-    })
+    // })
 
 }
 
