@@ -21,6 +21,8 @@ const SelectOptions = ({ ...props }) => {
             options.classList.remove(styles.optionsUnload)
             props.setOptions(false)
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useOutsideClick(optionsRef, handleClose)

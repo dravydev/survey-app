@@ -16,8 +16,6 @@ const Modal = ({ children, ...props }) => {
 
     const handleUnload = useCallback(() => {
 
-        console.log(props.loading)
-
         if (props.loading) return
 
         const wrapper = wrapperRef.current
@@ -29,6 +27,7 @@ const Modal = ({ children, ...props }) => {
             props.setModal(false)
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wrapperRef, props.loading])
 
     useOutsideClick(wrapperRef, handleUnload)

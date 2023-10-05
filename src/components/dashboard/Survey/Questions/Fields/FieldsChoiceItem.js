@@ -24,7 +24,7 @@ const FieldsChoiceItem = ({ ...props }) => {
 
     const selectedQuestion = useMemo(() => {
         return survey.questions.find(question => question._id === props.questionId)
-    }, [props.questionId])
+    }, [props.questionId, survey.questions])
 
     const handleDelete = useCallback(() => {
 
@@ -32,7 +32,8 @@ const FieldsChoiceItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
-    }, [survey])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [survey, selectedQuestion])
 
     useEffect(() => {
 
@@ -47,6 +48,7 @@ const FieldsChoiceItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [text, mountRef])
 
     return (

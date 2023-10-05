@@ -14,7 +14,7 @@ const FieldsChoiceInsert = ({ ...props }) => {
 
     const selectedQuestion = useMemo(() => {
         return survey.questions.find(question => question._id === props.questionId)
-    }, [props.questionId])
+    }, [props.questionId, survey.questions])
 
     const handleInsert = useCallback(async () => {
 
@@ -31,6 +31,7 @@ const FieldsChoiceInsert = ({ ...props }) => {
 
         if (input) input.select()
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [survey])
 
     if (selectedQuestion.fields.length < 10) return (

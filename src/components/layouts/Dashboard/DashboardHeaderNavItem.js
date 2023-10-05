@@ -21,7 +21,7 @@ const DashboardHeaderNavItem = ({ ...props }) => {
 
         return isPathMatched ? styles.headerNavListItemActive : ''
 
-    }, [router])
+    }, [router, props.matchers])
 
     return (
         <li className={cn(styles.headerNavListItem, isActive, inter)}>

@@ -57,7 +57,7 @@ const QuestionsContainerItem = ({ ...props }) => {
 
     const selectedQuestion = useMemo(() => {
         return survey.questions.find(question => question._id === props._id)
-    }, [props._id])
+    }, [props._id, survey.questions])
 
     const handleSelectQuestion = useCallback(event => {
 
@@ -69,6 +69,7 @@ const QuestionsContainerItem = ({ ...props }) => {
             block: 'center'
         })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedId])
 
     const handleSelect = useCallback(value => {
@@ -95,6 +96,7 @@ const QuestionsContainerItem = ({ ...props }) => {
       
         setSurvey({ ...survey })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [survey])
 
     const handleRequired = useCallback(status => {
@@ -103,6 +105,7 @@ const QuestionsContainerItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [survey])
 
     const handleDelete = useCallback(() => {
@@ -115,6 +118,7 @@ const QuestionsContainerItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedId, survey])
 
 
@@ -129,6 +133,7 @@ const QuestionsContainerItem = ({ ...props }) => {
 
         setSurvey({ ...survey })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [title, mountRef])
 
     return (

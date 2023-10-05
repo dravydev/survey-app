@@ -22,6 +22,7 @@ const Textarea = ({ ...props }) => {
 
         if (props.onChange) props.onChange(value)
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [textareaRef])
 
     useEffect(() => {

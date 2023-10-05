@@ -1,8 +1,24 @@
 @use "@/styles/variables" as *;
 
+.options {
+    z-index: 1;
+    top: 75px;
+    gap: .75rem;
+    padding: .75rem;
+    border-radius: .5rem;
+    margin-top: -.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: sticky;
+    background-color: rgb($background);
+    box-shadow: 0 1.5rem 2rem rgb($background, .75);
+}
+
 .container {
     gap: 1.5rem;
     display: flex;
+    padding: .75rem;
     flex-direction: column;
 
     &Item {

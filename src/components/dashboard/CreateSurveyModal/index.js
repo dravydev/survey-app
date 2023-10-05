@@ -43,7 +43,8 @@ const CreateSurveyModal = ({ ...props }) => {
 
         router.push(`/dashboard/survey/${data.survey._id}`)
 
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loading])
 
     return (
         <Modal

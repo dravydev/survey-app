@@ -110,7 +110,8 @@ const QuestionsOptions = () => {
             setLoading(false)
         }
 
-    }, [survey])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [survey, loading])
 
     const handleAddQuestion = useCallback(() => {
 
@@ -129,10 +130,22 @@ const QuestionsOptions = () => {
         setSurvey({ ...survey })
         setSelectedId(surveyId)
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [survey, selectedId])
 
     const handleVisit = useCallback(() => {
         window.open(`/survey/${survey._id}`)
+    }, [survey._id])
+
+    const handleShare = useCallback(() => {
+
+        navigator.clipboard?.writeText('https://survey-app-sigma.vercel.app/survey/' + survey._id)
+
+        notify({
+            message: 'Skopiowno do schowka',
+            status: 'info'
+        })
+        
     }, [survey._id])
 
     return (
@@ -157,7 +170,10 @@ const QuestionsOptions = () => {
                 <span>Odwiedź</span>
             </SecondaryButton>
 
-            <SecondaryButton>
+            <SecondaryButton
+                onClick={handleShare}
+                type="button"
+            >
                 <CgShare />
                 <span>Udostępnij</span>
             </SecondaryButton>
@@ -166,6 +182,7 @@ const QuestionsOptions = () => {
                 onClick={handleSave}
                 loading={loading}
                 disabled={synchronization}
+                type="button"
             >
                 <CgCheckO />
                 <span>Zapisz</span>

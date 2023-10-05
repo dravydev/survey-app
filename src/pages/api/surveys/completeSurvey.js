@@ -76,7 +76,7 @@ const validateAnswers = (answers, questions) => {
         if (answer) {
 
             if (answer.mode != question.mode) return false
-            // todo czy zgadza sie ields answer z question
+            // todo wszystkie walidacje
 
 
         }

@@ -17,6 +17,7 @@ const SurveyWrapper = ({ children }) => {
 
         if (!Object.keys(survey).length) router.push('/')
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [survey])
 
     if (!survey || !Object.keys(survey).length) return <SurveyLoading />

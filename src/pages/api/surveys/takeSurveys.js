@@ -7,11 +7,24 @@ import { getServerSession } from 'next-auth/next'
 
 const takeSurveys = async (req, res) => {
 
-    const { user } = await getServerSession(req, res, authOptions)
+    const session = await getServerSession(req, res, authOptions)
+
+    if (!session) {
+
+        res.json({
+            error: true,
+            details: {
+                reason: 'SessionError',
+                message: 'Wymagana autoryzacja, spróbuj ponownie'
+            }
+        })
+
+        return
+    }
 
     await mongoConnect()
 
-    const surveys = await Survey.find({ ownerId: user.id }, {
+    const surveys = await Survey.find({ ownerId: session.user.id }, {
         title: 1,
         description: 1,
         createdAt: 1

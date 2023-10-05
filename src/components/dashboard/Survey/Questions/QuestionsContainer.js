@@ -21,6 +21,7 @@ const QuestionsContainer = () => {
 
         setSurvey({ ...survey })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [survey])
 
     return (

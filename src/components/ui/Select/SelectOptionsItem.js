@@ -17,6 +17,7 @@ const SelectOptionsItem = ({ ...props }) => {
         props.handleClose()
         if (props.onSelect) props.onSelect(props.value)
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.status, props.value])
 
     return (

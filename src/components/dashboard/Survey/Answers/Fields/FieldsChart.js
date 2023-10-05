@@ -11,7 +11,8 @@ import {
     Filler,
     Legend
 } from 'chart.js'
-import { useMemo } from 'react';
+
+import { useMemo } from 'react'
 
 import { Pie } from 'react-chartjs-2'
 
@@ -26,9 +27,11 @@ ChartJS.register(
     Legend
 )
 
-const FieldsPieChart = ({ fields }) => {
+const FieldsChart = ({ fields, mode }) => {
 
-    const cleanFields = fields.map(field => field.at(0))
+    const cleanFields = mode === 'multipleChoice'
+        ? fields.flatMap(field => field)
+        : fields.map(field => field.at(0))
 
     const labels = [...new Set(cleanFields)]
 
@@ -50,10 +53,12 @@ const FieldsPieChart = ({ fields }) => {
                         'rgba(102, 178, 255, 1)',
                         'rgba(153, 204, 255, 1)',
                     ],
-                    borderWidth: 1,
-                },
-            ],
+                    borderWidth: 1
+                }
+            ]
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const options = useMemo(() => {
@@ -78,15 +83,15 @@ const FieldsPieChart = ({ fields }) => {
             responsive: true,
             animation: {
                 duration: 300,
-            },
-        };
+            }
+        }
     }, [])
 
     return (
-        <div className={styles.pieChart}>
+        <div className={styles.chart}>
             <Pie data={data} options={options} />
         </div>
     )
 }
 
-export default FieldsPieChart
+export default FieldsChart

@@ -38,7 +38,20 @@ const createSurvey = async (req, res) => {
         return
     }
 
-    const { user } = await getServerSession(req, res, authOptions)
+    const session = await getServerSession(req, res, authOptions)
+
+    if (!session) {
+
+        res.json({
+            error: true,
+            details: {
+                reason: 'SessionError',
+                message: 'Wymagana autoryzacja, spróbuj ponownie'
+            }
+        })
+
+        return
+    }
 
     const { title, description } = validator.value
 
@@ -55,29 +68,29 @@ const createSurvey = async (req, res) => {
                 fields: []
             },
             {
-                title: 'Jakie preferencje kolorów?',
+                title: 'Wybierz ulubione marki',
                 isRequired: false,
                 mode: 'multipleChoice',
                 fields: [
                     {
-                        slug: 'bialy',
-                        text: 'Biały'
+                        slug: 'opel',
+                        text: 'Opel'
                     },
                     {
-                        slug: 'czarny',
-                        text: 'Czarny'
+                        slug: 'bmw',
+                        text: 'Bmw'
                     },
                     {
-                        slug: 'szary',
-                        text: 'Szary'
+                        slug: 'audi',
+                        text: 'Audi'
                     },
                     {
-                        slug: 'czerwony',
-                        text: 'Czerwony'
+                        slug: 'ford',
+                        text: 'Ford'
                     },
                     {
-                        slug: 'zielony',
-                        text: 'Zielony'
+                        slug: 'peugeot',
+                        text: 'Peugeot'
                     }
                 ]
             },
@@ -97,7 +110,7 @@ const createSurvey = async (req, res) => {
                 ]
             }
         ],
-        ownerId: user.id
+        ownerId: session.user.id
     })
 
     res.json({

@@ -5,16 +5,26 @@ import Heading from '@/components/dashboard/Heading'
 import Survey from '@/components/dashboard/Survey'
 
 import SurveyProvider from '@/providers/SurveyProvider'
+import { Fragment } from 'react'
+import Head from 'next/head'
 
 const DashboardSurvey = () => {
     return (
-        <SurveyProvider>
+        <Fragment>
 
-            <Heading title="Ankieta" />
+            <Head>
+                <title>Kreator ankiety</title>
+            </Head>
 
-            <Survey />
+            <SurveyProvider>
 
-        </SurveyProvider>
+                <Heading title="Ankieta" />
+
+                <Survey />
+
+            </SurveyProvider>
+
+        </Fragment>
     )
 }
 

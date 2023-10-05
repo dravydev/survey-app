@@ -2,7 +2,7 @@ import cn from '@/utils/cn'
 import styles from './fields.module.scss'
 
 import FieldsGroup from './FieldsGroup'
-import FieldsPieChart from './FieldsPieChart'
+import FieldsChart from './FieldsChart'
 
 import inter from '@/assets/fonts/inter'
 
@@ -14,8 +14,8 @@ const Fields = ({ ...props }) => {
         return {
             shortAnswer: FieldsGroup,
             longAnswer: FieldsGroup,
-            singleChoice: FieldsPieChart,
-            multipleChoice: FieldsGroup
+            singleChoice: FieldsChart,
+            multipleChoice: FieldsChart
         }
     }, [])
 
@@ -23,7 +23,7 @@ const Fields = ({ ...props }) => {
 
     return (
         <div className={styles.root}>
-            {props.fields ? <Mode fields={props.fields} /> : <p className={cn(styles.rootEmpty, inter)}>Brak odpowiedzi</p>}
+            {props.fields ? <Mode fields={props.fields} mode={props.mode} /> : <p className={cn(styles.rootEmpty, inter)}>Brak odpowiedzi</p>}
         </div>
     )
 }

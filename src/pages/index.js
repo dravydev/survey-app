@@ -1,6 +1,19 @@
+import Welcome from '@/components/home/Welcome'
+
+import Head from 'next/head'
+import { Fragment } from 'react'
+
 const Home = () => {
   return (
-    <h1>h</h1>
+    <Fragment>
+
+      <Head>
+        <title>Kreator ankiet</title>
+      </Head>
+
+      <Welcome />
+
+    </Fragment>
   )
 }
 

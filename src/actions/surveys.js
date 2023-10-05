@@ -123,11 +123,32 @@ const completeSurvey = async (params, data) => {
 
 }
 
+const refreshSurveyAnswers = async params => {
+
+    const response = await sendRequest({
+        method: 'get',
+        path: '/surveys/refreshSurveyAnswers?surveyId=' + params.surveyId,
+        timeout: 5_000
+    })
+
+    if (response?.data?.error) return {
+        error: response.data.details
+    }
+
+    return {
+        data: {
+            answers: response.data.answers
+        }
+    }
+
+}
+
 export {
     createSurvey,
     takeSurveys,
     takeSurvey,
     updateSurveyQuestions,
     takeSurveysPaths,
-    completeSurvey
+    completeSurvey,
+    refreshSurveyAnswers
 }

@@ -11,7 +11,7 @@ const Fields = ({ ...props }) => {
 
     const selectedQuestion = useMemo(() => {
         return survey.questions.find(question => question._id === props.questionId)
-    }, [props.questionId])
+    }, [props.questionId, survey.questions])
 
     const modes = useMemo(() => {
         return {

@@ -133,8 +133,6 @@ const Form = () => {
                 return
             }
 
-            console.log(data)
-
             saveSurvey(completedSurveys, survey._id)
 
             setCompleted(true)
@@ -143,6 +141,7 @@ const Form = () => {
             setLoading(false)
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     if (!survey.questions.length) return <FormInfo

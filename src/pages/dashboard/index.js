@@ -12,6 +12,7 @@ import {
 } from 'react-icons/bi'
 
 import { Fragment, useState } from 'react'
+import Head from 'next/head'
 
 const DashboardHome = () => {
 
@@ -19,6 +20,10 @@ const DashboardHome = () => {
 
     return (
         <Fragment>
+
+            <Head>
+                <title>Ankiety</title>
+            </Head>
 
             {modal && <CreateSurveyModal setModal={setModal} />}
 
