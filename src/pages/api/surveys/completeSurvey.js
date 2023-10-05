@@ -151,18 +151,18 @@ const completeSurvey = async (req, res) => {
 
         const ipAddressExists = survey.answers.some(answer => answer.ipAddress == ipAddress)
 
-        // if (ipAddressExists) {
+        if (ipAddressExists) {
 
-        //     res.json({
-        //         error: true,
-        //         details: {
-        //             reason: 'AlreadyCompletedError',
-        //             message: 'Już rozwiązałeś te ankietę'
-        //         }
-        //     })
+            res.json({
+                error: true,
+                details: {
+                    reason: 'AlreadyCompletedError',
+                    message: 'Już rozwiązałeś te ankietę'
+                }
+            })
 
-        //     return
-        // }
+            return
+        }
 
         await Survey.updateOne(
             {
