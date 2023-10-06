@@ -4,17 +4,15 @@ import Head from 'next/head'
 import { Fragment } from 'react'
 
 const Home = () => {
-  return (
-    <Fragment>
+	return (
+		<Fragment>
+			<Head>
+				<title>Kreator ankiet</title>
+			</Head>
 
-      <Head>
-        <title>Kreator ankiet</title>
-      </Head>
-
-      <Welcome />
-
-    </Fragment>
-  )
+			<Welcome />
+		</Fragment>
+	)
 }
 
 export default Home

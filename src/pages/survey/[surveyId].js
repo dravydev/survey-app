@@ -9,22 +9,19 @@ import Head from 'next/head'
 import { useSurvey } from '@/hooks'
 
 const SurveyHome = () => {
+	const { survey } = useSurvey()
 
-    const { survey } = useSurvey()
+	return (
+		<ReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA}>
+			<Head>
+				<title>Ankieta - {survey.title}</title>
+			</Head>
 
-    return (
-        <ReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA}>
-            
-            <Head>
-                <title>Ankieta - {survey.title}</title>
-            </Head>
+			<Heading />
 
-            <Heading />
-
-            <Form />
-
-        </ReCaptchaProvider>
-    )
+			<Form />
+		</ReCaptchaProvider>
+	)
 }
 
 SurveyHome.Layout = Survey

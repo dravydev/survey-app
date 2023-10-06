@@ -2,9 +2,7 @@ import styles from './answers.module.scss'
 
 import { PrimaryButton } from '@/components/ui/Button'
 
-import {
-    BiRefresh
-} from 'react-icons/bi'
+import { BiRefresh } from 'react-icons/bi'
 
 import { refreshSurveyAnswers } from '@/actions/surveys'
 
@@ -14,68 +12,60 @@ import { useSurvey } from '@/hooks'
 import notify from '@/utils/notify'
 
 const AnswersOptions = () => {
+	const { survey, setSurvey } = useSurvey()
+	const [loading, setLoading] = useState(false)
 
-    const { survey, setSurvey } = useSurvey()
-    const [loading, setLoading] = useState(false)
+	const handleRefresh = useCallback(async () => {
+		try {
+			if (loading) return
 
-    const handleRefresh = useCallback(async () => {
+			setLoading(true)
 
-        try {
+			const { error, data } = await refreshSurveyAnswers({
+				surveyId: survey._id
+			})
 
-            if (loading) return
+			if (error) {
+				notify({
+					message: 'Wystąpił błąd podczas odświeżania',
+					status: 'error'
+				})
 
-            setLoading(true)
+				return
+			}
 
-            const { error, data } = await refreshSurveyAnswers({ surveyId: survey._id })
+			if (survey.answers.length === data.answers.length) {
+				notify({
+					message: 'Brak nowych odpowiedzi',
+					status: 'info'
+				})
 
-            if (error) {
+				return
+			}
 
-                notify({
-                    message: 'Wystąpił błąd podczas odświeżania',
-                    status: 'error'
-                })
+			survey.answers = data.answers
 
-                return
-            }
+			setSurvey({ ...survey })
 
-            if (survey.answers.length === data.answers.length) {
+			notify({
+				message: 'Pomyślnie odświeżono odpowiedzi',
+				status: 'success'
+			})
+		} finally {
+			setLoading(false)
+		}
 
-                notify({
-                    message: 'Brak nowych odpowiedzi',
-                    status: 'info'
-                })
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loading, survey])
 
-                return
-            }
-
-            survey.answers = data.answers
-
-            setSurvey({ ...survey })
-
-            notify({
-                message: 'Pomyślnie odświeżono odpowiedzi',
-                status: 'success'
-            })
-
-        } finally {
-            setLoading(false)
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading, survey])
-
-    return (
-        <div className={styles.options}>
-            <PrimaryButton
-                onClick={handleRefresh}
-                loading={loading}
-                type="button"
-            >
-                <BiRefresh />
-                <span>Odśwież</span>
-            </PrimaryButton>
-        </div>
-    )
+	return (
+		<div className={styles.options}>
+			<PrimaryButton onClick={handleRefresh} loading={loading} type="button">
+				<BiRefresh />
+				<span>Odśwież</span>
+			</PrimaryButton>
+		</div>
+	)
 }
 
 export default AnswersOptions

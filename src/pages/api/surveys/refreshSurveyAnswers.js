@@ -8,79 +8,69 @@ import { authOptions } from '../auth/[...nextauth]'
 import { getServerSession } from 'next-auth/next'
 
 const schema = Joi.object({
-
-    surveyId: Joi.string()
-        .hex()
-        .length(24)
-        .required()
-
+	surveyId: Joi.string().hex().length(24).required()
 })
 
 const refreshSurveyAnswers = async (req, res) => {
+	const validator = schema.validate(req.query)
 
-    const validator = schema.validate(req.query)
+	console.log(validator)
 
-    console.log(validator)
+	if (validator.error) {
+		res.json({
+			error: true,
+			details: {
+				reason: 'ValidationError',
+				message: 'Nieprawidłowe dane, spróbuj ponownie'
+			}
+		})
 
-    if (validator.error) {
+		return
+	}
 
-        res.json({
-            error: true,
-            details: {
-                reason: 'ValidationError',
-                message: 'Nieprawidłowe dane, spróbuj ponownie'
-            }
-        })
+	const session = await getServerSession(req, res, authOptions)
 
-        return
-    }
+	if (!session) {
+		res.json({
+			error: true,
+			details: {
+				reason: 'SessionError',
+				message: 'Wymagana autoryzacja, spróbuj ponownie'
+			}
+		})
 
-    const session = await getServerSession(req, res, authOptions)
+		return
+	}
 
-    if (!session) {
+	const { surveyId } = validator.value
 
-        res.json({
-            error: true,
-            details: {
-                reason: 'SessionError',
-                message: 'Wymagana autoryzacja, spróbuj ponownie'
-            }
-        })
+	await mongoConnect()
 
-        return
-    }
+	const survey = await Survey.findOne(
+		{
+			_id: surveyId,
+			ownerId: session.user.id
+		},
+		{
+			answers: {
+				fields: 1
+			}
+		}
+	)
 
-    const { surveyId } = validator.value
+	if (!survey) {
+		res.json({
+			error: true,
+			details: {
+				reason: 'AccessError',
+				message: 'Nie masz dostępu do tej ankiety'
+			}
+		})
 
-    await mongoConnect()
+		return
+	}
 
-    const survey = await Survey.findOne(
-        {
-            _id: surveyId,
-            ownerId: session.user.id
-        },
-        {
-            answers: {
-                fields: 1
-            }
-        }
-    )
-
-    if (!survey) {
-
-        res.json({
-            error: true,
-            details: {
-                reason: 'AccessError',
-                message: 'Nie masz dostępu do tej ankiety'
-            }
-        })
-
-        return
-    }
-
-    res.json({ answers: survey.answers })
-
+	res.json({ answers: survey.answers })
 }
 
 export default refreshSurveyAnswers

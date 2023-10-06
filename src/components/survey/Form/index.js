@@ -8,167 +8,152 @@ import FormInfo from './FormInfo'
 import notify from '@/utils/notify'
 import { completeSurvey } from '@/actions/surveys'
 
-import {
-    BiCheckCircle,
-    BiErrorCircle
-} from 'react-icons/bi'
+import { BiCheckCircle, BiErrorCircle } from 'react-icons/bi'
 
 import { useSurvey } from '@/hooks'
 import { useReCaptcha } from 'next-recaptcha-v3'
 import { useCallback, useState } from 'react'
 
 const getCompletedSurveys = () => {
+	const surveys = localStorage.getItem('surveys')
 
-    const surveys = localStorage.getItem('surveys')
-
-    return surveys ? JSON.parse(surveys) : []
+	return surveys ? JSON.parse(surveys) : []
 }
 
 const saveSurvey = (surveys, surveyId) => {
+	surveys.push(surveyId)
 
-    surveys.push(surveyId)
-
-    localStorage.setItem('surveys', JSON.stringify(surveys))
-
+	localStorage.setItem('surveys', JSON.stringify(surveys))
 }
 
+const showError = (questionId) => {
+	const question = document.querySelector(`[data-id="${questionId}"]`)
 
-const showError = questionId => {
-
-    const question = document.querySelector(`[data-id="${questionId}"]`)
-
-    question.classList.add(styles.itemError)
-
+	question.classList.add(styles.itemError)
 }
 
 const Form = () => {
+	const { survey } = useSurvey()
+	const { executeRecaptcha } = useReCaptcha()
 
-    const { survey } = useSurvey()
-    const { executeRecaptcha } = useReCaptcha()
+	const completedSurveys = getCompletedSurveys()
 
-    const completedSurveys = getCompletedSurveys()
+	const [loading, setLoading] = useState(false)
+	const [completed, setCompleted] = useState(
+		completedSurveys.includes(survey._id)
+	)
 
-    const [loading, setLoading] = useState(false)
-    const [completed, setCompleted] = useState(completedSurveys.includes(survey._id))
+	const handleForm = useCallback(async (event) => {
+		event.preventDefault()
 
-    const handleForm = useCallback(async event => {
+		try {
+			if (loading) return
 
-        event.preventDefault()
+			setLoading(true)
 
-        try {
+			const answers = []
 
-            if (loading) return
+			const questions = document.querySelectorAll(`.${styles.item}`)
 
-            setLoading(true)
+			questions.forEach((question) => {
+				const { id, mode, required } = question.dataset
 
-            const answers = []
+				if (mode.endsWith('Choice')) {
+					const fields = question.querySelectorAll('input')
 
-            const questions = document.querySelectorAll(`.${styles.item}`)
+					const fieldsChecked = Array.from(fields)
+						.filter((field) => field.checked)
+						.map((field) => field.value)
 
-            questions.forEach(question => {
+					if (!fieldsChecked.length && required === 'true') {
+						showError(id)
+						return
+					}
 
-                const { id, mode, required } = question.dataset
+					if (fieldsChecked.length)
+						answers.push({
+							_id: id,
+							mode: mode,
+							values: fieldsChecked
+						})
+				} else {
+					const field = question.querySelector(
+						mode.startsWith('short') ? 'input' : 'textarea'
+					)
 
-                if (mode.endsWith('Choice')) {
+					if (!field.value.length && required === 'true') {
+						showError(id)
+						return
+					}
 
-                    const fields = question.querySelectorAll('input')
+					if (field.value.length)
+						answers.push({
+							_id: id,
+							mode: mode,
+							value: field.value
+						})
+				}
+			})
 
-                    const fieldsChecked = Array.from(fields)
-                        .filter(field => field.checked)
-                        .map(field => field.value)
+			const { error, data } = await completeSurvey(
+				{ surveyId: survey._id },
+				{
+					recaptchaToken: await executeRecaptcha(),
+					answers: answers
+				}
+			)
 
-                    if (!fieldsChecked.length && required === 'true') {
-                        showError(id)
-                        return
-                    }
+			if (error) {
+				notify({
+					message: error.message,
+					status: 'error'
+				})
 
-                    if (fieldsChecked.length) answers.push({
-                        _id: id,
-                        mode: mode,
-                        values: fieldsChecked
-                    })
+				if (error.reason === 'AlreadyCompletedError') {
+					saveSurvey(completedSurveys, survey._id)
 
-                } else {
+					setCompleted(true)
+				}
 
-                    const field = question.querySelector(mode.startsWith('short') ? 'input' : 'textarea')
+				return
+			}
 
-                    if (!field.value.length && required === 'true') {
-                        showError(id)
-                        return
-                    }
+			saveSurvey(completedSurveys, survey._id)
 
-                    if (field.value.length) answers.push({
-                        _id: id,
-                        mode: mode,
-                        value: field.value
-                    })
+			setCompleted(true)
+		} finally {
+			setLoading(false)
+		}
 
-                }
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
-            })
+	if (!survey.questions.length)
+		return (
+			<FormInfo
+				icon={<BiErrorCircle />}
+				text="Ankieta jest tymczasowo niedostępna."
+			/>
+		)
 
-            const { error, data } = await completeSurvey(
-                { surveyId: survey._id },
-                {
-                    recaptchaToken: await executeRecaptcha(),
-                    answers: answers
-                }
-            )
+	if (completed)
+		return (
+			<FormInfo
+				icon={<BiCheckCircle />}
+				text="Twoje odpowiedzi zostały zapisane."
+			/>
+		)
 
-            if (error) {
-
-                notify({
-                    message: error.message,
-                    status: 'error'
-                })
-
-                if (error.reason === 'AlreadyCompletedError') {
-
-                    saveSurvey(completedSurveys, survey._id)
-
-                    setCompleted(true)
-
-                }
-
-                return
-            }
-
-            saveSurvey(completedSurveys, survey._id)
-
-            setCompleted(true)
-
-        } finally {
-            setLoading(false)
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    if (!survey.questions.length) return <FormInfo
-        icon={<BiErrorCircle />}
-        text="Ankieta jest tymczasowo niedostępna."
-    />
-
-    if (completed) return <FormInfo
-        icon={<BiCheckCircle />}
-        text="Twoje odpowiedzi zostały zapisane."
-    />
-
-    return (
-        <form
-            autoComplete="off"
-            onSubmit={handleForm}
-            className={styles.root}
-        >
-            {survey.questions.map(question => <FormItem
-                key={question._id}
-                {...question}
-            />)}
-            <PrimaryButton disabled={completed} loading={loading}>
-                <span>Zakończ ankietę</span>
-            </PrimaryButton>
-        </form>
-    )
+	return (
+		<form autoComplete="off" onSubmit={handleForm} className={styles.root}>
+			{survey.questions.map((question) => (
+				<FormItem key={question._id} {...question} />
+			))}
+			<PrimaryButton disabled={completed} loading={loading}>
+				<span>Zakończ ankietę</span>
+			</PrimaryButton>
+		</form>
+	)
 }
 
 export default Form

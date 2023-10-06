@@ -1,27 +1,27 @@
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .root {
-    margin-top: .75rem;
+	margin-top: 0.75rem;
 
-    &Empty {
-        font-size: .925rem;
-    }
+	&Empty {
+		font-size: 0.925rem;
+	}
 }
 
 .group {
-    gap: .75rem;
-    display: flex;
-    flex-direction: column;
+	gap: 0.75rem;
+	display: flex;
+	flex-direction: column;
 
-    &Item {
-        padding: .75rem;
-        font-size: .925rem;
-        border-radius: .5rem;
-        background-color: rgba($foreground, .25);
-    }
+	&Item {
+		padding: 0.75rem;
+		font-size: 0.925rem;
+		border-radius: 0.5rem;
+		background-color: rgba($foreground, 0.25);
+	}
 }
 
 .chart {
-    width: 20rem;
-    margin-inline: auto;
+	width: 20rem;
+	margin-inline: auto;
 }

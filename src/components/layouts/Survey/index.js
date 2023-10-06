@@ -8,23 +8,19 @@ import Head from 'next/head'
 import { Fragment } from 'react'
 
 const Survey = ({ children }) => {
-    return (
-        <Fragment>
+	return (
+		<Fragment>
+			<Head>
+				<title>Ankieta</title>
+			</Head>
 
-            <Head>
-                <title>Ankieta</title>
-            </Head>
+			<SurveyProvider>
+				<SurveyWrapper>{children}</SurveyWrapper>
+			</SurveyProvider>
 
-            <SurveyProvider>
-                <SurveyWrapper>
-                    {children}
-                </SurveyWrapper>
-            </SurveyProvider>
-
-            <Theme />
-
-        </Fragment>
-    )
+			<Theme />
+		</Fragment>
+	)
 }
 
 export default Survey

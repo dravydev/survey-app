@@ -7,37 +7,32 @@ import CreateSurveyModal from '@/components/dashboard/CreateSurveyModal'
 
 import { PrimaryButton } from '@/components/ui/Button'
 
-import {
-    BiPlus
-} from 'react-icons/bi'
+import { BiPlus } from 'react-icons/bi'
 
 import { Fragment, useState } from 'react'
 import Head from 'next/head'
 
 const DashboardHome = () => {
+	const [modal, setModal] = useState(false)
 
-    const [modal, setModal] = useState(false)
+	return (
+		<Fragment>
+			<Head>
+				<title>Ankiety</title>
+			</Head>
 
-    return (
-        <Fragment>
+			{modal && <CreateSurveyModal setModal={setModal} />}
 
-            <Head>
-                <title>Ankiety</title>
-            </Head>
+			<Heading title="Ankiety">
+				<PrimaryButton onClick={() => setModal(true)}>
+					<BiPlus />
+					<span>Utwórz ankietę</span>
+				</PrimaryButton>
+			</Heading>
 
-            {modal && <CreateSurveyModal setModal={setModal} />}
-
-            <Heading title="Ankiety">
-                <PrimaryButton onClick={() => setModal(true)}>
-                    <BiPlus />
-                    <span>Utwórz ankietę</span>
-                </PrimaryButton>
-            </Heading>
-
-            <Surveys />
-
-        </Fragment>
-    )
+			<Surveys />
+		</Fragment>
+	)
 }
 
 DashboardHome.Layout = Dashboard

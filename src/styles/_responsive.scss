@@ -6,7 +6,7 @@ $xl: 1380px;
 $xxl: 1536px;
 
 @mixin screen($size) {
-    @media only screen and (min-width: $size) {
-        @content;
-    }
+	@media only screen and (min-width: $size) {
+		@content;
+	}
 }

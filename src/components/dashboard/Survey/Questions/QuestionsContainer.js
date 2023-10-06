@@ -7,44 +7,45 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useCallback } from 'react'
 
 const QuestionsContainer = () => {
+	const { survey, setSurvey } = useSurvey()
 
-    const { survey, setSurvey } = useSurvey()
+	const onDragEnd = useCallback(
+		(event) => {
+			const { source, destination } = event
 
-    const onDragEnd = useCallback(event => {
+			if (!destination) return
 
-        const { source, destination } = event
+			const [itemToMove] = survey.questions.splice(source.index, 1)
+			survey.questions.splice(destination.index, 0, itemToMove)
 
-        if (!destination) return
+			setSurvey({ ...survey })
 
-        const [itemToMove] = survey.questions.splice(source.index, 1)
-        survey.questions.splice(destination.index, 0, itemToMove)
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[survey]
+	)
 
-        setSurvey({ ...survey })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey])
-
-    return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable
-                getContainerForClone={true}
-                droppableId="questions"
-                direction="vertical"
-            >
-
-                {provided => (
-                    <div ref={provided.innerRef} className={styles.container}>
-                        {survey.questions.map((question, index) => <QuestionsContainerItem
-                            key={question._id}
-                            {...question}
-                            index={index}
-                        />)}
-                    </div>
-                )}
-
-            </Droppable>
-        </DragDropContext>
-    )
+	return (
+		<DragDropContext onDragEnd={onDragEnd}>
+			<Droppable
+				getContainerForClone={true}
+				droppableId="questions"
+				direction="vertical"
+			>
+				{(provided) => (
+					<div ref={provided.innerRef} className={styles.container}>
+						{survey.questions.map((question, index) => (
+							<QuestionsContainerItem
+								key={question._id}
+								{...question}
+								index={index}
+							/>
+						))}
+					</div>
+				)}
+			</Droppable>
+		</DragDropContext>
+	)
 }
 
 export default QuestionsContainer

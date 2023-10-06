@@ -1,68 +1,68 @@
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .root {
-    z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    background-color: rgba($background, .5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: rgba($background, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-    &Heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+	&Heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 
-        &Title {
-            font-weight: 600;
-            font-size: 1.1em;
-        }
+		&Title {
+			font-weight: 600;
+			font-size: 1.1em;
+		}
 
-        &Close {
-            cursor: pointer;
-            display: grid;
-            transition: scale .25s;
+		&Close {
+			cursor: pointer;
+			display: grid;
+			transition: scale 0.25s;
 
-            &:hover {
-                scale: 1.1;
-            }
+			&:hover {
+				scale: 1.1;
+			}
 
-            svg {
-                font-size: 1.75rem;
-            }
-        }
-    }
+			svg {
+				font-size: 1.75rem;
+			}
+		}
+	}
 
-    &Wrapper {
-        padding: 1.5rem;
-        border-radius: .5rem;
-        border: 1px solid rgb($foreground);
-        background-color: rgb($background);
-        animation: loadWrapper .25s;
-        width: min(100%, 420px);
+	&Wrapper {
+		padding: 1.5rem;
+		border-radius: 0.5rem;
+		border: 1px solid rgb($foreground);
+		background-color: rgb($background);
+		animation: loadWrapper 0.25s;
+		width: min(100%, 420px);
 
-        &Unload {
-            animation: unloadWrapper .25s;
-        }
-    }
+		&Unload {
+			animation: unloadWrapper 0.25s;
+		}
+	}
 }
 
 @keyframes loadWrapper {
-    0% {
-        opacity: 0;
-        scale: .9;
-        // translate: 0 -100%;
-    }
+	0% {
+		opacity: 0;
+		scale: 0.9;
+		// translate: 0 -100%;
+	}
 }
 
 @keyframes unloadWrapper {
-    100% {
-        opacity: 0;
-        scale: .9;
-        // translate: 0 -100%;
-    }
+	100% {
+		opacity: 0;
+		scale: 0.9;
+		// translate: 0 -100%;
+	}
 }

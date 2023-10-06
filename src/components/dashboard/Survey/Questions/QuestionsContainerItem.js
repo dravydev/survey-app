@@ -12,9 +12,7 @@ import { PiDotsSix } from 'react-icons/pi'
 import cn from '@/utils/cn'
 import generateHexId from '@/utils/generateHexId'
 
-import {
-    BiTrashAlt
-} from 'react-icons/bi'
+import { BiTrashAlt } from 'react-icons/bi'
 
 import { SecondaryButton } from '@/components/ui/Button'
 
@@ -23,189 +21,195 @@ import { useDebounce, useSurvey } from '@/hooks'
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 
 const QuestionsContainerItem = ({ ...props }) => {
+	const mountRef = useRef(false)
 
-    const mountRef = useRef(false)
+	const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
 
-    const { survey, setSurvey, selectedId, setSelectedId } = useSurvey()
+	const [titleValue, setTitleValue] = useState(props.title)
 
-    const [titleValue, setTitleValue] = useState(props.title)
+	const title = useDebounce(titleValue, 500)
 
-    const title = useDebounce(titleValue, 500)
+	const isSelected =
+		props._id === selectedId ? styles.containerItemSelected : ''
 
-    const isSelected = props._id === selectedId ? styles.containerItemSelected : ''
+	const modes = useMemo(() => {
+		return [
+			{
+				value: 'shortAnswer',
+				text: 'Krótka odpowiedź'
+			},
+			{
+				value: 'longAnswer',
+				text: 'Długa odpowiedź'
+			},
+			{
+				value: 'singleChoice',
+				text: 'Jednokrotny wybór'
+			},
+			{
+				value: 'multipleChoice',
+				text: 'Wielokrotny wybór'
+			}
+		]
+	}, [])
 
-    const modes = useMemo(() => {
-        return [
-            {
-                value: 'shortAnswer',
-                text: 'Krótka odpowiedź'
-            },
-            {
-                value: 'longAnswer',
-                text: 'Długa odpowiedź'
-            },
-            {
-                value: 'singleChoice',
-                text: 'Jednokrotny wybór'
-            },
-            {
-                value: 'multipleChoice',
-                text: 'Wielokrotny wybór'
-            }
-        ]
-    }, [])
+	const selectedQuestion = useMemo(() => {
+		return survey.questions.find((question) => question._id === props._id)
+	}, [props._id, survey.questions])
 
-    const selectedQuestion = useMemo(() => {
-        return survey.questions.find(question => question._id === props._id)
-    }, [props._id, survey.questions])
+	const handleSelectQuestion = useCallback(
+		(event) => {
+			if (selectedId === props._id) return
 
-    const handleSelectQuestion = useCallback(event => {
+			setSelectedId(props._id)
 
-        if (selectedId === props._id) return
+			event.currentTarget.scrollIntoView({
+				block: 'center'
+			})
 
-        setSelectedId(props._id)
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[selectedId]
+	)
 
-        event.currentTarget.scrollIntoView({
-            block: 'center'
-        })
+	const handleSelect = useCallback(
+		(value) => {
+			selectedQuestion.mode = value
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedId])
+			if (!value.endsWith('Choice')) {
+				selectedQuestion.fields = []
+			} else {
+				if (!selectedQuestion.fields.length) {
+					const fieldId = generateHexId(24)
 
-    const handleSelect = useCallback(value => {
+					selectedQuestion.fields.push({
+						_id: fieldId,
+						text: 'Nowa opcja'
+					})
+				}
+			}
 
-        selectedQuestion.mode = value
+			setSurvey({ ...survey })
 
-        if (!value.endsWith('Choice')) {
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[survey]
+	)
 
-            selectedQuestion.fields = []
+	const handleRequired = useCallback(
+		(status) => {
+			selectedQuestion.isRequired = status
 
-        } else {
+			setSurvey({ ...survey })
 
-            if (!selectedQuestion.fields.length) {
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[survey]
+	)
 
-                const fieldId = generateHexId(24)
+	const handleDelete = useCallback(() => {
+		survey.questions = survey.questions.filter(
+			(question) => question._id != selectedId
+		)
 
-                selectedQuestion.fields.push({
-                    _id: fieldId,
-                    text: 'Nowa opcja'
-                })
-            }
+		const selectedIndex = survey.questions.findIndex(
+			(question) => question._id === selectedId
+		)
 
-        }
-      
-        setSurvey({ ...survey })
+		setSelectedId(
+			survey.questions.length ? survey.questions.at(selectedIndex)._id : null
+		)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey])
+		setSurvey({ ...survey })
 
-    const handleRequired = useCallback(status => {
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedId, survey])
 
-        selectedQuestion.isRequired = status
+	useEffect(() => {
+		if (!mountRef.current) {
+			mountRef.current = true
+			return
+		}
 
-        setSurvey({ ...survey })
+		selectedQuestion.title = title
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey])
+		setSurvey({ ...survey })
 
-    const handleDelete = useCallback(() => {
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [title, mountRef])
 
-        survey.questions = survey.questions.filter(question => question._id != selectedId)
+	return (
+		<Draggable index={props.index} draggableId={props._id}>
+			{(provided, snapshot) => {
+				const isActive = snapshot.isDragging ? styles.containerItemActive : ''
 
-        const selectedIndex = survey.questions.findIndex(question => question._id === selectedId)
+				const transform = provided.draggableProps.style.transform
 
-        setSelectedId(survey.questions.length ? survey.questions.at(selectedIndex)._id : null)
+				const style = {
+					...provided.draggableProps.style,
+					transform: transform?.replace(/\(([^,]+),/, '(0px,')
+				}
 
-        setSurvey({ ...survey })
+				return (
+					<div
+						ref={provided.innerRef}
+						{...provided.draggableProps}
+						style={style}
+						onClick={handleSelectQuestion}
+						className={cn(
+							styles.containerItem,
+							isActive,
+							isSelected,
+							styles.block
+						)}
+					>
+						<div
+							{...provided.dragHandleProps}
+							className={styles.containerItemMove}
+						>
+							<PiDotsSix />
+						</div>
+						<Input
+							name="title"
+							label="Tytuł pytania"
+							minLength={3}
+							maxLength={64}
+							onChange={(value) => setTitleValue(value)}
+							defaultValue={props.title}
+							autoComplete="off"
+							required
+						/>
+						<Fields questionId={props._id} />
+						<div className={styles.containerItemSettings}>
+							<Select
+								label="Rodzaj"
+								name="mode"
+								index={modes.findIndex((mode) => mode.value == props.mode)}
+								options={modes.map((mode) => ({
+									value: mode.value,
+									text: mode.text
+								}))}
+								onSelect={handleSelect}
+							/>
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedId, survey])
+							<Tooltip text="Usuń pytanie">
+								<SecondaryButton onClick={handleDelete} type="button">
+									<BiTrashAlt />
+								</SecondaryButton>
+							</Tooltip>
 
-
-    useEffect(() => {
-
-        if (!mountRef.current) {
-            mountRef.current = true
-            return
-        }
-
-        selectedQuestion.title = title
-
-        setSurvey({ ...survey })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [title, mountRef])
-
-    return (
-        <Draggable
-            index={props.index}
-            draggableId={props._id}
-        >
-            {(provided, snapshot) => {
-
-                const isActive = snapshot.isDragging ? styles.containerItemActive : ''
-
-                const transform = provided.draggableProps.style.transform
-
-                const style = {
-                    ...provided.draggableProps.style,
-                    transform: transform?.replace(/\(([^,]+),/, '(0px,')
-                }
-
-                return (
-                    <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        style={style}
-                        onClick={handleSelectQuestion}
-                        className={cn(styles.containerItem, isActive, isSelected, styles.block)}
-                    >
-                        <div
-                            {...provided.dragHandleProps}
-                            className={styles.containerItemMove}
-                        >
-                            <PiDotsSix />
-                        </div>
-                        <Input
-                            name="title"
-                            label="Tytuł pytania"
-                            minLength={3}
-                            maxLength={64}
-                            onChange={value => setTitleValue(value)}
-                            defaultValue={props.title}
-                            autoComplete="off"
-                            required
-                        />
-                        <Fields questionId={props._id} />
-                        <div className={styles.containerItemSettings}>
-
-                            <Select
-                                label="Rodzaj"
-                                name="mode"
-                                index={modes.findIndex(mode => mode.value == props.mode)}
-                                options={modes.map(mode => ({ value: mode.value, text: mode.text }))}
-                                onSelect={handleSelect}
-                            />
-
-                            <Tooltip text="Usuń pytanie">
-                                <SecondaryButton onClick={handleDelete} type="button">
-                                    <BiTrashAlt />
-                                </SecondaryButton>
-                            </Tooltip>
-
-                            <Switch
-                                name="isRequired"
-                                label="Wymagane"
-                                status={props.isRequired}
-                                onSwitch={handleRequired}
-                            />
-
-                        </div>
-                    </div>
-                )
-            }}
-        </Draggable>
-    )
+							<Switch
+								name="isRequired"
+								label="Wymagane"
+								status={props.isRequired}
+								onSwitch={handleRequired}
+							/>
+						</div>
+					</div>
+				)
+			}}
+		</Draggable>
+	)
 }
 
 export default QuestionsContainerItem

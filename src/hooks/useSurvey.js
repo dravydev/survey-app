@@ -3,10 +3,9 @@ import SurveyContext from '@/contexts/SurveyContext'
 import { useContext } from 'react'
 
 const useSurvey = () => {
+	const context = useContext(SurveyContext)
 
-    const context = useContext(SurveyContext)
-
-    return context
+	return context
 }
 
 export default useSurvey

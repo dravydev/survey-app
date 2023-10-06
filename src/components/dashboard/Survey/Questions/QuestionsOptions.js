@@ -1,16 +1,8 @@
 import styles from './questions.module.scss'
 
-import {
-    PrimaryButton,
-    SecondaryButton
-} from '@/components/ui/Button'
+import { PrimaryButton, SecondaryButton } from '@/components/ui/Button'
 
-import {
-    CgEye,
-    CgShare,
-    CgCheckO,
-    CgMathPlus
-} from 'react-icons/cg'
+import { CgEye, CgShare, CgCheckO, CgMathPlus } from 'react-icons/cg'
 
 import cn from '@/utils/cn'
 import notify from '@/utils/notify'
@@ -23,173 +15,164 @@ import { useSurvey } from '@/hooks'
 import { useCallback, useState } from 'react'
 
 const QuestionsOptions = () => {
+	const {
+		survey,
+		setSurvey,
+		selectedId,
+		setSelectedId,
+		synchronization,
+		setSynchronization
+	} = useSurvey()
 
-    const {
-        survey, setSurvey,
-        selectedId, setSelectedId,
-        synchronization, setSynchronization
-    } = useSurvey()
+	const [loading, setLoading] = useState(false)
 
-    const [loading, setLoading] = useState(false)
+	const handleSave = useCallback(
+		async (event) => {
+			event.preventDefault()
 
-    const handleSave = useCallback(async event => {
+			try {
+				if (loading) return
 
-        event.preventDefault()
+				setLoading(true)
 
-        try {
+				for (const question of survey.questions) {
+					if (question.title.length < 3 || question.title.length > 64) {
+						notify({
+							message: 'Popraw tytuł wybranego pytania',
+							status: 'info'
+						})
 
-            if (loading) return
+						setSelectedId(question._id)
 
-            setLoading(true)
+						return
+					}
 
-            for (const question of survey.questions) {
+					if (question.fields)
+						for (const field of question.fields) {
+							if (!field.text.length) {
+								notify({
+									message: 'Popraw opcje wybranego pytania',
+									status: 'info'
+								})
 
-                if (question.title.length < 3 || question.title.length > 64) {
+								setSelectedId(question._id)
 
-                    notify({
-                        message: 'Popraw tytuł wybranego pytania',
-                        status: 'info'
-                    })
+								return
+							}
+						}
+				}
 
-                    setSelectedId(question._id)
+				const { error } = await updateSurveyQuestions(
+					{ surveyId: survey._id },
+					{
+						questions: survey.questions.map((question) => {
+							return {
+								_id: question._id,
+								title: question.title,
+								mode: question.mode,
+								isRequired: question.isRequired,
+								fields: question.fields.map((field) => ({
+									text: field.text
+								}))
+							}
+						})
+					}
+				)
 
-                    return
-                }
+				if (error) {
+					notify({
+						message: error.message,
+						status: 'error'
+					})
 
-                if (question.fields) for (const field of question.fields) {
+					return
+				}
 
-                    if (!field.text.length) {
-                        notify({
-                            message: 'Popraw opcje wybranego pytania',
-                            status: 'info'
-                        })
+				notify({
+					message: 'Pomyślnie zapisano zmiany',
+					status: 'success'
+				})
 
-                        setSelectedId(question._id)
+				setSynchronization(true)
+			} finally {
+				setLoading(false)
+			}
 
-                        return
-                    }
-                }
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[survey, loading]
+	)
 
-            }
+	const handleAddQuestion = useCallback(() => {
+		const surveyId = generateHexId(24)
 
-            const { error } = await updateSurveyQuestions(
-                { surveyId: survey._id },
-                {
-                    questions: survey.questions.map(question => {
-                        return {
-                            _id: question._id,
-                            title: question.title,
-                            mode: question.mode,
-                            isRequired: question.isRequired,
-                            fields: question.fields.map(field => ({
-                                text: field.text
-                            }))
-                        }
-                    })
-                }
-            )
+		const selectedIndex = survey.questions.findIndex(
+			(question) => question._id === selectedId
+		)
 
-            if (error) {
+		survey.questions.splice(selectedIndex + 1, 0, {
+			_id: surveyId,
+			isRequired: true,
+			title: 'Nowe pytanie',
+			fields: [],
+			mode: 'shortAnswer'
+		})
 
-                notify({
-                    message: error.message,
-                    status: 'error'
-                })
+		setSurvey({ ...survey })
+		setSelectedId(surveyId)
 
-                return
-            }
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [survey, selectedId])
 
-            notify({
-                message: 'Pomyślnie zapisano zmiany',
-                status: 'success'
-            })
+	const handleVisit = useCallback(() => {
+		window.open(`/survey/${survey._id}`)
+	}, [survey._id])
 
-            setSynchronization(true)
+	const handleShare = useCallback(() => {
+		navigator.clipboard?.writeText(
+			'https://survey-app-sigma.vercel.app/survey/' + survey._id
+		)
 
-        } finally {
-            setLoading(false)
-        }
+		notify({
+			message: 'Skopiowno do schowka',
+			status: 'info'
+		})
+	}, [survey._id])
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey, loading])
+	return (
+		<div className={styles.options}>
+			<h2 className={cn(styles.optionsTitle, inter)}>{survey.title}</h2>
 
-    const handleAddQuestion = useCallback(() => {
+			<SecondaryButton
+				onClick={handleAddQuestion}
+				disabled={survey.questions.length >= 30}
+				type="button"
+			>
+				<CgMathPlus />
+				<span>Pytanie</span>
+			</SecondaryButton>
 
-        const surveyId = generateHexId(24)
+			<SecondaryButton onClick={handleVisit} type="button">
+				<CgEye />
+				<span>Odwiedź</span>
+			</SecondaryButton>
 
-        const selectedIndex = survey.questions.findIndex(question => question._id === selectedId)
+			<SecondaryButton onClick={handleShare} type="button">
+				<CgShare />
+				<span>Udostępnij</span>
+			</SecondaryButton>
 
-        survey.questions.splice(selectedIndex + 1, 0, {
-            _id: surveyId,
-            isRequired: true,
-            title: 'Nowe pytanie',
-            fields: [],
-            mode: 'shortAnswer'
-        })
-
-        setSurvey({ ...survey })
-        setSelectedId(surveyId)
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey, selectedId])
-
-    const handleVisit = useCallback(() => {
-        window.open(`/survey/${survey._id}`)
-    }, [survey._id])
-
-    const handleShare = useCallback(() => {
-
-        navigator.clipboard?.writeText('https://survey-app-sigma.vercel.app/survey/' + survey._id)
-
-        notify({
-            message: 'Skopiowno do schowka',
-            status: 'info'
-        })
-        
-    }, [survey._id])
-
-    return (
-        <div className={styles.options}>
-
-            <h2 className={cn(styles.optionsTitle, inter)}>{survey.title}</h2>
-
-            <SecondaryButton
-                onClick={handleAddQuestion}
-                disabled={survey.questions.length >= 30}
-                type="button"
-            >
-                <CgMathPlus />
-                <span>Pytanie</span>
-            </SecondaryButton>
-
-            <SecondaryButton
-                onClick={handleVisit}
-                type="button"
-            >
-                <CgEye />
-                <span>Odwiedź</span>
-            </SecondaryButton>
-
-            <SecondaryButton
-                onClick={handleShare}
-                type="button"
-            >
-                <CgShare />
-                <span>Udostępnij</span>
-            </SecondaryButton>
-
-            <PrimaryButton
-                onClick={handleSave}
-                loading={loading}
-                disabled={synchronization}
-                type="button"
-            >
-                <CgCheckO />
-                <span>Zapisz</span>
-            </PrimaryButton>
-
-        </div>
-    )
+			<PrimaryButton
+				onClick={handleSave}
+				loading={loading}
+				disabled={synchronization}
+				type="button"
+			>
+				<CgCheckO />
+				<span>Zapisz</span>
+			</PrimaryButton>
+		</div>
+	)
 }
 
 export default QuestionsOptions

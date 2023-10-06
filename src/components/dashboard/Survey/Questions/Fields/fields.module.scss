@@ -1,85 +1,84 @@
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .root {
-    margin-block: .75rem;
+	margin-block: 0.75rem;
 }
 
 .choice {
+	&Mode {
+		padding-block: 0.75rem;
+		border-bottom: 1px dashed rgb($foreground);
+		user-select: none;
 
-    &Mode {
-        padding-block: .75rem;
-        border-bottom: 1px dashed rgb($foreground);
-        user-select: none;
+		&Text {
+			font-size: 0.975rem;
+			font-weight: 400;
+			color: rgb($primary, 0.75);
+		}
+	}
 
-        &Text {
-            font-size: .975rem;
-            font-weight: 400;
-            color: rgb($primary, .75);
-        }
-    }
+	&Item {
+		gap: 0.75rem;
+		display: flex;
+		align-items: center;
 
-    &Item {
-        gap: .75rem;
-        display: flex;
-        align-items: center;
+		&:nth-last-child(2) {
+			margin-bottom: 0.75rem;
+		}
 
-        &:nth-last-child(2) {
-            margin-bottom: .75rem;
-        }
+		&Bullet {
+			width: 1.25rem;
+			height: 1.25rem;
+			border: 2px solid rgb($foreground);
 
-        &Bullet {
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid rgb($foreground);
+			&Square {
+				border-radius: 0.25rem;
+			}
 
-            &Square {
-                border-radius: .25rem;
-            }
+			&Circle {
+				border-radius: 50%;
+			}
+		}
 
-            &Circle {
-                border-radius: 50%;
-            }
-        }
+		&Input {
+			font-size: 0.975rem;
+			font-weight: 400;
+			padding-block: 0.75rem;
+			border-bottom: 2px solid transparent;
 
-        &Input {
-            font-size: .975rem;
-            font-weight: 400;
-            padding-block: .75rem;
-            border-bottom: 2px solid transparent;
+			&:focus {
+				border-color: rgb($main);
+			}
+		}
 
-            &:focus {
-                border-color: rgb($main);
-            }
-        }
+		&Delete {
+			cursor: pointer;
+			padding: 0.5rem;
+			display: grid;
 
-        &Delete {
-            cursor: pointer;
-            padding: .5rem;
-            display: grid;
+			svg {
+				font-size: 1rem;
+			}
+		}
+	}
 
-            svg {
-                font-size: 1rem;
-            }
-        }
-    }
+	&Insert {
+		gap: 0.5rem;
+		display: flex;
 
-    &Insert {
-        gap: .5rem;
-        display: flex;
+		&Text {
+			font-size: 0.975rem;
+		}
 
-        &Text {
-            font-size: .975rem;
-        }
+		&Button {
+			cursor: pointer;
+			font-weight: 500;
+			font-size: 0.95rem;
+			color: rgb($main);
 
-        &Button {
-            cursor: pointer;
-            font-weight: 500;
-            font-size: .95rem;
-            color: rgb($main);
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-    }
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
 }

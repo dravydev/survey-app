@@ -1,46 +1,49 @@
-@use "@/styles/variables" as *;
-@use "@/styles/responsive" as *;
+@use '@/styles/variables' as *;
+@use '@/styles/responsive' as *;
 
 .root {
-    display: flex;
-    position: relative;
-    padding: .25rem;
-    border-radius: .5rem;
-    border: 1px solid rgb($foreground);
+	display: flex;
+	position: relative;
+	padding: 0.25rem;
+	border-radius: 0.5rem;
+	border: 1px solid rgb($foreground);
 
-    &:focus-within {
-        .rootLabel {
-            color: rgb($main);
-            left: 1.25rem;
-        }
-    }
+	&:focus-within {
+		.rootLabel {
+			color: rgb($main);
+			left: 1.25rem;
+		}
+	}
 
-    &Active,
-    &:focus-within {
-        .rootLabel {
-            font-size: .875rem;
-            translate: 0 -1rem;
-        }
-    }
+	&Active,
+	&:focus-within {
+		.rootLabel {
+			font-size: 0.875rem;
+			translate: 0 -1rem;
+		}
+	}
 
-    &Label {
-        top: 1.5rem;
-        left: 1.25rem;
-        position: absolute;
-        color: rgba($primary, .75);
-        user-select: none;
-        pointer-events: none;
-        transition: font-size .25s, translate .25s, color .25s;
-    }
+	&Label {
+		top: 1.5rem;
+		left: 1.25rem;
+		position: absolute;
+		color: rgba($primary, 0.75);
+		user-select: none;
+		pointer-events: none;
+		transition:
+			font-size 0.25s,
+			translate 0.25s,
+			color 0.25s;
+	}
 
-    &Input {
-        flex: 1;
-        padding: 1.75rem 1rem .75rem 1rem;
-    }
+	&Input {
+		flex: 1;
+		padding: 1.75rem 1rem 0.75rem 1rem;
+	}
 
-    &Input,
-    &Label {
-        font-size: .975rem;
-        font-weight: 500;
-    }
+	&Input,
+	&Label {
+		font-size: 0.975rem;
+		font-weight: 500;
+	}
 }

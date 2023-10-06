@@ -5,42 +5,34 @@ import { takeSurveys } from '@/actions/surveys'
 import { useEffect, useState } from 'react'
 
 const SurveysProvider = ({ children }) => {
+	const [surveys, setSurveys] = useState(null)
 
-    const [surveys, setSurveys] = useState(null)
+	useEffect(() => {
+		let attempts = 0
 
-    useEffect(() => {
+		const handleTakeSurveys = (timeout = 0) => {
+			setTimeout(async () => {
+				const { error, data } = await takeSurveys()
 
-        let attempts = 0
+				if (error && attempts < 3) {
+					handleTakeSurveys(1000)
+					attempts++
 
-        const handleTakeSurveys = (timeout = 0) => {
+					return
+				}
 
-            setTimeout(async () => {
+				setSurveys(data.surveys)
+			}, timeout)
+		}
 
-                const { error, data } = await takeSurveys()
+		handleTakeSurveys()
+	}, [])
 
-                if (error && attempts < 3) {
-
-                    handleTakeSurveys(1000)
-                    attempts++
-
-                    return
-                }
-
-                setSurveys(data.surveys)
-
-            }, timeout)
-
-        }
-
-        handleTakeSurveys()
-
-    }, [])
-
-    return (
-        <SurveysContext.Provider value={{ surveys, setSurveys }}>
-            {children}
-        </SurveysContext.Provider>
-    )
+	return (
+		<SurveysContext.Provider value={{ surveys, setSurveys }}>
+			{children}
+		</SurveysContext.Provider>
+	)
 }
 
 export default SurveysProvider

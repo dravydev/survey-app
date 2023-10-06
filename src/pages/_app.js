@@ -15,23 +15,22 @@ Router.events.on('routeChangeComplete', () => NProgress.done())
 Router.events.on('routeChangeError', () => NProgress.done())
 
 const App = ({ Component, pageProps: { session, ...pageProps } }) => {
+	const Layout = Component.Layout || (({ children }) => children)
 
-  const Layout = Component.Layout || (({ children }) => children)
-
-  return (
-    <ThemeProvider
-      defaultTheme="dark"
-      enableSystem={false}
-      disableTransitionOnChange
-    >
-      <SessionProvider session={session}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </SessionProvider>
-      <Toaster />
-    </ThemeProvider>
-  )
+	return (
+		<ThemeProvider
+			defaultTheme="dark"
+			enableSystem={false}
+			disableTransitionOnChange
+		>
+			<SessionProvider session={session}>
+				<Layout>
+					<Component {...pageProps} />
+				</Layout>
+			</SessionProvider>
+			<Toaster />
+		</ThemeProvider>
+	)
 }
 
 export default App

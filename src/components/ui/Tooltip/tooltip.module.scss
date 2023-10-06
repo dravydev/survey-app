@@ -1,66 +1,66 @@
 .root {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-    &Tooltip {
-        pointer-events: none;
-        user-select: none;
-        position: absolute;
-        padding: .25rem .5rem;
-        border-radius: .5rem;
-        font-size: .825rem;
-        white-space: nowrap;
-        color: rgb(255, 255, 255);
-        background-color: rgba(#000, .5);
+	&Tooltip {
+		pointer-events: none;
+		user-select: none;
+		position: absolute;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.5rem;
+		font-size: 0.825rem;
+		white-space: nowrap;
+		color: rgb(255, 255, 255);
+		background-color: rgba(#000, 0.5);
 
-        &Top {
-            bottom: 2.75rem;
-            animation: loadTooltipTop .25s;
-        }
+		&Top {
+			bottom: 2.75rem;
+			animation: loadTooltipTop 0.25s;
+		}
 
-        &Bottom {
-            top: 2.75rem;
-            animation: loadTooltipBottom .25s;
-        }
+		&Bottom {
+			top: 2.75rem;
+			animation: loadTooltipBottom 0.25s;
+		}
 
-        &Left {
-            right: 2.75rem;
-            animation: loadTooltipLeft .25s;
-        }
+		&Left {
+			right: 2.75rem;
+			animation: loadTooltipLeft 0.25s;
+		}
 
-        &Right {
-            left: 2.75rem;
-            animation: loadTooltipRight .25s;
-        }
-    }
+		&Right {
+			left: 2.75rem;
+			animation: loadTooltipRight 0.25s;
+		}
+	}
 }
 
 @keyframes loadTooltipTop {
-    0% {
-        opacity: 0;
-        translate: 0 50%;
-    }
+	0% {
+		opacity: 0;
+		translate: 0 50%;
+	}
 }
 
 @keyframes loadTooltipBottom {
-    0% {
-        opacity: 0;
-        translate: 0 -50%;
-    }
+	0% {
+		opacity: 0;
+		translate: 0 -50%;
+	}
 }
 
 @keyframes loadTooltipLeft {
-    0% {
-        opacity: 0;
-        translate: 50%;
-    }
+	0% {
+		opacity: 0;
+		translate: 50%;
+	}
 }
 
 @keyframes loadTooltipRight {
-    0% {
-        opacity: 0;
-        translate: -50%;
-    }
+	0% {
+		opacity: 0;
+		translate: -50%;
+	}
 }

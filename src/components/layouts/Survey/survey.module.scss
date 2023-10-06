@@ -1,27 +1,27 @@
-@use "@/styles/keyframes";
-@use "@/styles/variables" as *;
-@use "@/styles/responsive" as *;
+@use '@/styles/keyframes';
+@use '@/styles/variables' as *;
+@use '@/styles/responsive' as *;
 
 .wrapper {
-    padding: .75rem;
-    width: min(100%, $mg);
-    margin-inline: auto;
+	padding: 0.75rem;
+	width: min(100%, $mg);
+	margin-inline: auto;
 
-    @include screen($md) {
-        padding: 1.5rem;
-    }
+	@include screen($md) {
+		padding: 1.5rem;
+	}
 }
 
 .loading {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    display: grid;
-    place-content: center;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	display: grid;
+	place-content: center;
 
-    svg {
-        fill: rgb($main);
-        font-size: 2.25rem;
-        animation: spinner .5s infinite linear;
-    }
+	svg {
+		fill: rgb($main);
+		font-size: 2.25rem;
+		animation: spinner 0.5s infinite linear;
+	}
 }

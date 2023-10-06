@@ -7,16 +7,17 @@ import { useSurveys } from '@/hooks'
 import Loader from '@/components/ui/Loader'
 
 const Surveys = () => {
+	const { surveys } = useSurveys()
 
-    const { surveys } = useSurveys()
+	if (!surveys) return <Loader />
 
-    if (!surveys) return <Loader />
-
-    return (
-        <div className={styles.root}>
-            {surveys?.map(survey => <SurveysItem key={survey._id} {...survey} />)}
-        </div>
-    )
+	return (
+		<div className={styles.root}>
+			{surveys?.map((survey) => (
+				<SurveysItem key={survey._id} {...survey} />
+			))}
+		</div>
+	)
 }
 
 export default Surveys

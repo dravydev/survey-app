@@ -5,15 +5,24 @@ import FieldsChoiceItem from './FieldsChoiceItem'
 import FieldsChoiceInsert from './FieldsChoiceInsert'
 
 const FieldsChoice = ({ ...props }) => {
-    return (
-        <div className={styles.choice}>
-            <FieldsChoiceMode text={props.text} />
-            {props.mode.endsWith('Choice') && <div>
-                {props.fields.map(field => <FieldsChoiceItem key={field._id} mode={props.mode} questionId={props.questionId} {...field} />)}
-                <FieldsChoiceInsert questionId={props.questionId} />
-            </div>}
-        </div>
-    )
+	return (
+		<div className={styles.choice}>
+			<FieldsChoiceMode text={props.text} />
+			{props.mode.endsWith('Choice') && (
+				<div>
+					{props.fields.map((field) => (
+						<FieldsChoiceItem
+							key={field._id}
+							mode={props.mode}
+							questionId={props.questionId}
+							{...field}
+						/>
+					))}
+					<FieldsChoiceInsert questionId={props.questionId} />
+				</div>
+			)}
+		</div>
+	)
 }
 
 export default FieldsChoice

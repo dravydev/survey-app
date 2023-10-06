@@ -3,9 +3,4 @@ import useSurvey from './useSurvey'
 import useOutsideClick from './useOutsideClick'
 import useDebounce from './useDebounce'
 
-export {
-    useSurveys,
-    useSurvey,
-    useOutsideClick,
-    useDebounce
-}
+export { useSurveys, useSurvey, useOutsideClick, useDebounce }

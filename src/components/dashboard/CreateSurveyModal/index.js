@@ -11,80 +11,69 @@ import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 
 const CreateSurveyModal = ({ ...props }) => {
+	const router = useRouter()
 
-    const router = useRouter()
+	const [loading, setLoading] = useState(false)
+	const { surveys, setSurveys } = useSurveys()
 
-    const [loading, setLoading] = useState(false)
-    const { surveys, setSurveys } = useSurveys()
+	const handleForm = useCallback(
+		async (event) => {
+			event.preventDefault()
 
-    const handleForm = useCallback(async event => {
+			if (loading) return
 
-        event.preventDefault()
+			setLoading(true)
 
-        if (loading) return
+			const formData = new FormData(event.target)
 
-        setLoading(true)
+			const { error, data } = await createSurvey(formData)
 
-        const formData = new FormData(event.target)
+			if (error) {
+				setLoading(false)
 
-        const { error, data } = await createSurvey(formData)
+				return
+			}
 
-        if (error) {
-            
-            setLoading(false)
+			if (surveys) setSurveys([...surveys, data.survey])
 
-            return
-        }
+			router.push(`/dashboard/survey/${data.survey._id}`)
 
-        if (surveys) setSurveys([
-            ...surveys,
-            data.survey
-        ])
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		},
+		[loading]
+	)
 
-        router.push(`/dashboard/survey/${data.survey._id}`)
+	return (
+		<Modal
+			title="Tworzenie ankiety"
+			loading={loading}
+			setModal={props.setModal}
+		>
+			<form autoComplete="off" onSubmit={handleForm} className={styles.root}>
+				<Input
+					label="Tytuł ankiety"
+					name="title"
+					type="text"
+					minLength={3}
+					maxLength={32}
+					required
+				/>
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading])
+				<Input
+					label="Opis ankiety"
+					name="description"
+					type="text"
+					minLength={3}
+					maxLength={256}
+					required
+				/>
 
-    return (
-        <Modal
-            title="Tworzenie ankiety"
-            loading={loading}
-            setModal={props.setModal}
-        >
-
-            <form
-                autoComplete="off"
-                onSubmit={handleForm}
-                className={styles.root}
-            >
-
-                <Input
-                    label="Tytuł ankiety"
-                    name="title"
-                    type="text"
-                    minLength={3}
-                    maxLength={32}
-                    required
-                />
-
-                <Input
-                    label="Opis ankiety"
-                    name="description"
-                    type="text"
-                    minLength={3}
-                    maxLength={256}
-                    required
-                />
-
-                <PrimaryButton loading={loading}>
-                    <span>Utwórz ankietę</span>
-                </PrimaryButton>
-
-            </form>
-
-        </Modal>
-    )
+				<PrimaryButton loading={loading}>
+					<span>Utwórz ankietę</span>
+				</PrimaryButton>
+			</form>
+		</Modal>
+	)
 }
 
 export default CreateSurveyModal

@@ -9,23 +9,19 @@ import { Fragment } from 'react'
 import Head from 'next/head'
 
 const DashboardSurvey = () => {
-    return (
-        <Fragment>
+	return (
+		<Fragment>
+			<Head>
+				<title>Kreator ankiety</title>
+			</Head>
 
-            <Head>
-                <title>Kreator ankiety</title>
-            </Head>
+			<SurveyProvider>
+				<Heading title="Ankieta" />
 
-            <SurveyProvider>
-
-                <Heading title="Ankieta" />
-
-                <Survey />
-
-            </SurveyProvider>
-
-        </Fragment>
-    )
+				<Survey />
+			</SurveyProvider>
+		</Fragment>
+	)
 }
 
 DashboardSurvey.Layout = Dashboard

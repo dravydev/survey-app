@@ -1,94 +1,94 @@
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .options {
-    z-index: 1;
-    top: 75px;
-    gap: .75rem;
-    padding: .75rem;
-    border-radius: .5rem;
-    margin-top: -.75rem;
-    display: flex;
-    align-items: center;
-    position: sticky;
-    background-color: rgb($background);
-    box-shadow: 0 1.5rem 2rem rgb($background, .75);
+	z-index: 1;
+	top: 75px;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	margin-top: -0.75rem;
+	display: flex;
+	align-items: center;
+	position: sticky;
+	background-color: rgb($background);
+	box-shadow: 0 1.5rem 2rem rgb($background, 0.75);
 
-    &Title {
-        font-weight: 600;
-        font-size: 1.25rem;
-        margin-right: auto;
-    }
+	&Title {
+		font-weight: 600;
+		font-size: 1.25rem;
+		margin-right: auto;
+	}
 }
 
 .block {
-    padding: 1.5rem;
-    border-radius: .5rem;
-    border: 1px solid rgb($foreground);
+	padding: 1.5rem;
+	border-radius: 0.5rem;
+	border: 1px solid rgb($foreground);
 }
 
 .container {
-    margin-top: 1.5rem;
-    padding-inline: .75rem;
+	margin-top: 1.5rem;
+	padding-inline: 0.75rem;
 
-    &Inner {
-        padding-inline: 1.5rem;
-    }
+	&Inner {
+		padding-inline: 1.5rem;
+	}
 
-    &Heading {
-        gap: .75rem;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1.5rem;
+	&Heading {
+		gap: 0.75rem;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 1.5rem;
 
-        &Selected {
-            outline: 2px solid rgb($main);
-        }
-    }
+		&Selected {
+			outline: 2px solid rgb($main);
+		}
+	}
 
-    &Item {
-        gap: .75rem;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        background-color: rgb($background);
-        margin-bottom: 1.5rem;
-        max-height: 145px;
+	&Item {
+		gap: 0.75rem;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		background-color: rgb($background);
+		margin-bottom: 1.5rem;
+		max-height: 145px;
 
-        > :nth-child(2) {
-            border-color: transparent;
-        }
+		> :nth-child(2) {
+			border-color: transparent;
+		}
 
-        &Active {
-            background-color: rgb($foreground);
-        }
+		&Active {
+			background-color: rgb($foreground);
+		}
 
-        &Selected {
-            outline: 2px solid rgb($main);
-            max-height: 1000px;
+		&Selected {
+			outline: 2px solid rgb($main);
+			max-height: 1000px;
 
-            > :nth-child(2) {
-                border-color: inherit;
-            }
-        }
+			> :nth-child(2) {
+				border-color: inherit;
+			}
+		}
 
-        &Move {
-            display: flex;
-            justify-content: center;
+		&Move {
+			display: flex;
+			justify-content: center;
 
-            svg {
-                font-size: 1.75rem;
-            }
-        }
+			svg {
+				font-size: 1.75rem;
+			}
+		}
 
-        &Settings {
-            gap: 1.5rem;
-            display: flex;
-            align-items: center;
+		&Settings {
+			gap: 1.5rem;
+			display: flex;
+			align-items: center;
 
-            > :first-child {
-                margin-right: auto;
-            }
-        }
-    }
+			> :first-child {
+				margin-right: auto;
+			}
+		}
+	}
 }

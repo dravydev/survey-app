@@ -1,91 +1,91 @@
-@use "@/styles/variables" as *;
-@use "@/styles/responsive" as *;
+@use '@/styles/variables' as *;
+@use '@/styles/responsive' as *;
 
 .root {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    position: relative;
-    padding: .25rem;
-    border-radius: .5rem;
-    border: 1px solid rgb($foreground);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding: 0.25rem;
+	border-radius: 0.5rem;
+	border: 1px solid rgb($foreground);
 
-    &Active {
-        .rootLabel {
-            color: rgb($main);
-        }
-    }
+	&Active {
+		.rootLabel {
+			color: rgb($main);
+		}
+	}
 
-    &Label {
-        left: 1.25rem;
-        position: absolute;
-        color: rgba($primary, .75);
-        user-select: none;
-        pointer-events: none;
-        font-size: .875rem;
-        translate: 0 -1rem;
-        transition: color .25s;
-    }
+	&Label {
+		left: 1.25rem;
+		position: absolute;
+		color: rgba($primary, 0.75);
+		user-select: none;
+		pointer-events: none;
+		font-size: 0.875rem;
+		translate: 0 -1rem;
+		transition: color 0.25s;
+	}
 
-    &Input {
-        flex: 1;
-        padding: 1.75rem 1rem .75rem 1rem;
-        font-size: .975rem;
-    }
+	&Input {
+		flex: 1;
+		padding: 1.75rem 1rem 0.75rem 1rem;
+		font-size: 0.975rem;
+	}
 
-    &Input,
-    &Label {
-        cursor: pointer;
-        font-weight: 500;
-    }
+	&Input,
+	&Label {
+		cursor: pointer;
+		font-weight: 500;
+	}
 }
 
 .options {
-    left: 0;
-    gap: .5rem;
-    bottom: calc(69px + .5rem);
-    z-index: 2;
-    width: 100%;
-    padding: .5rem;
-    display: flex;
-    flex-direction: column;
-    border-radius: .5rem;
-    position: absolute;
-    max-height: 206px;
-    overflow-y: auto;
-    border: 1px solid rgb($foreground);
-    background-color: rgb($background);
-    animation: loadOptions .25s;
+	left: 0;
+	gap: 0.5rem;
+	bottom: calc(69px + 0.5rem);
+	z-index: 2;
+	width: 100%;
+	padding: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	border-radius: 0.5rem;
+	position: absolute;
+	max-height: 206px;
+	overflow-y: auto;
+	border: 1px solid rgb($foreground);
+	background-color: rgb($background);
+	animation: loadOptions 0.25s;
 
-    &Unload {
-        animation: unloadOptions .25s;
-    }
+	&Unload {
+		animation: unloadOptions 0.25s;
+	}
 
-    &Item {
-        cursor: pointer;
-        user-select: none;
-        font-size: .9rem;
-        border-radius: .5rem;
-        padding: .75rem;
-        font-weight: 500;
-        transition: background-color .25s;
-        
-        &:hover {
-            background-color: rgba($foreground, .5);
-        }
-    }
+	&Item {
+		cursor: pointer;
+		user-select: none;
+		font-size: 0.9rem;
+		border-radius: 0.5rem;
+		padding: 0.75rem;
+		font-weight: 500;
+		transition: background-color 0.25s;
+
+		&:hover {
+			background-color: rgba($foreground, 0.5);
+		}
+	}
 }
 
 @keyframes loadOptions {
-    0% {
-        scale: .75;
-        opacity: 0;
-    }
+	0% {
+		scale: 0.75;
+		opacity: 0;
+	}
 }
 
 @keyframes unloadOptions {
-    100% {
-        scale: .75;
-        opacity: 0;
-    }
+	100% {
+		scale: 0.75;
+		opacity: 0;
+	}
 }

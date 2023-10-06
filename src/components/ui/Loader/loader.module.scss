@@ -1,12 +1,12 @@
-@use "@/styles/keyframes";
-@use "@/styles/variables" as *;
+@use '@/styles/keyframes';
+@use '@/styles/variables' as *;
 
 .root {
-    padding: .75rem;
+	padding: 0.75rem;
 
-    svg {
-        fill: rgb($main);
-        font-size: 1.75rem;
-        animation: spinner .5s infinite;
-    }
+	svg {
+		fill: rgb($main);
+		font-size: 1.75rem;
+		animation: spinner 0.5s infinite;
+	}
 }

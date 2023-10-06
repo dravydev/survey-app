@@ -9,44 +9,43 @@ import { useSurvey } from '@/hooks'
 import { useCallback, useMemo } from 'react'
 
 const FieldsChoiceInsert = ({ ...props }) => {
+	const { survey, setSurvey } = useSurvey()
 
-    const { survey, setSurvey } = useSurvey()
+	const selectedQuestion = useMemo(() => {
+		return survey.questions.find(
+			(question) => question._id === props.questionId
+		)
+	}, [props.questionId, survey.questions])
 
-    const selectedQuestion = useMemo(() => {
-        return survey.questions.find(question => question._id === props.questionId)
-    }, [props.questionId, survey.questions])
+	const handleInsert = useCallback(async () => {
+		const fieldId = generateHexId(24)
 
-    const handleInsert = useCallback(async () => {
+		selectedQuestion.fields.push({
+			_id: fieldId,
+			text: 'Nowa opcja'
+		})
 
-        const fieldId = generateHexId(24)
+		await setSurvey({ ...survey })
 
-        selectedQuestion.fields.push({
-            _id: fieldId,
-            text: 'Nowa opcja'
-        })
+		const input = document.querySelector(`[data-id="${fieldId}"]`)
 
-        await setSurvey({ ...survey })
+		if (input) input.select()
 
-        const input = document.querySelector(`[data-id="${fieldId}"]`)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [survey])
 
-        if (input) input.select()
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey])
-
-    if (selectedQuestion.fields.length < 10) return (
-        <div className={cn(styles.choiceInsert, inter)}>
-
-            <button
-                type="button"
-                onClick={handleInsert}
-                className={styles.choiceInsertButton}
-            >
-                Dodaj opcję
-            </button>
-
-        </div>
-    )
+	if (selectedQuestion.fields.length < 10)
+		return (
+			<div className={cn(styles.choiceInsert, inter)}>
+				<button
+					type="button"
+					onClick={handleInsert}
+					className={styles.choiceInsertButton}
+				>
+					Dodaj opcję
+				</button>
+			</div>
+		)
 }
 
 export default FieldsChoiceInsert

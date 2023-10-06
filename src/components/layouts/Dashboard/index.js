@@ -8,21 +8,18 @@ import SurveysProvider from '@/providers/SurveysProvider'
 import { useSession } from 'next-auth/react'
 
 const Dashboard = ({ children }) => {
+	const { status } = useSession()
 
-    const { status } = useSession()
+	if (status == 'loading') return <DashboardLoading />
 
-    if (status == 'loading') return <DashboardLoading />
+	if (status == 'unauthenticated') return <DashboardAuthorize />
 
-    if (status == 'unauthenticated') return <DashboardAuthorize />
-
-    return (
-        <SurveysProvider>
-            <DashboardHeader />
-            <DashboardMain>
-                {children}
-            </DashboardMain>
-        </SurveysProvider>
-    )
+	return (
+		<SurveysProvider>
+			<DashboardHeader />
+			<DashboardMain>{children}</DashboardMain>
+		</SurveysProvider>
+	)
 }
 
 export default Dashboard

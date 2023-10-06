@@ -1,29 +1,28 @@
 @keyframes spinner {
-    100% {
-        rotate: 360deg;
-    }
+	100% {
+		rotate: 360deg;
+	}
 }
 
 @keyframes shake {
+	10%,
+	90% {
+		translate: -0.25rem 0.25rem;
+	}
 
-    10%,
-    90% {
-        translate: -.25rem .25rem;
-    }
+	20%,
+	80% {
+		translate: 0.25rem -0.25rem;
+	}
 
-    20%,
-    80% {
-        translate: .25rem -.25rem;
-    }
+	30%,
+	50%,
+	70% {
+		translate: -0.25rem 0.25rem;
+	}
 
-    30%,
-    50%,
-    70% {
-        translate: -.25rem .25rem;
-    }
-
-    40%,
-    60% {
-        translate: .25rem -.25rem;
-    }
+	40%,
+	60% {
+		translate: 0.25rem -0.25rem;
+	}
 }

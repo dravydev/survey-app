@@ -6,49 +6,47 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 const SurveyProvider = ({ children }) => {
+	const router = useRouter()
 
-    const router = useRouter()
+	const [survey, setSurvey] = useState(null)
+	const [selectedId, setSelectedId] = useState(null)
+	const [synchronization, setSynchronization] = useState(true)
 
-    const [survey, setSurvey] = useState(null)
-    const [selectedId, setSelectedId] = useState(null)
-    const [synchronization, setSynchronization] = useState(true)
+	useEffect(() => {
+		const { surveyId } = router.query
 
-    useEffect(() => {
+		const handleTakeSurvey = async () => {
+			const { error, data } = await takeSurvey({ surveyId })
 
-        const { surveyId } = router.query
+			if (error) {
+				setSurvey({})
 
-        const handleTakeSurvey = async () => {
+				return
+			}
 
-            const { error, data } = await takeSurvey({ surveyId })
+			setSelectedId(
+				data.survey.questions.length ? data.survey.questions.at(0)._id : null
+			)
+			setSurvey(data.survey)
+		}
 
-            if (error) {
+		if (surveyId) handleTakeSurvey()
+	}, [router])
 
-                setSurvey({})
-
-                return
-            }
-
-            setSelectedId(data.survey.questions.length ? data.survey.questions.at(0)._id : null)
-            setSurvey(data.survey)
-
-        }
-
-        if (surveyId) handleTakeSurvey()
-
-    }, [router])
-
-    return (
-        <SurveyContext.Provider value={{
-            survey,
-            setSurvey,
-            selectedId,
-            setSelectedId,
-            synchronization,
-            setSynchronization
-        }}>
-            {children}
-        </SurveyContext.Provider>
-    )
+	return (
+		<SurveyContext.Provider
+			value={{
+				survey,
+				setSurvey,
+				selectedId,
+				setSelectedId,
+				synchronization,
+				setSynchronization
+			}}
+		>
+			{children}
+		</SurveyContext.Provider>
+	)
 }
 
 export default SurveyProvider

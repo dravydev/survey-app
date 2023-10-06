@@ -6,42 +6,38 @@ import { useOutsideClick } from '@/hooks'
 import { useCallback, useRef } from 'react'
 
 const SelectOptions = ({ ...props }) => {
+	const optionsRef = useRef()
 
-    const optionsRef = useRef()
+	const handleClose = useCallback(() => {
+		const options = optionsRef.current
 
-    const handleClose = useCallback(() => {
+		if (!options) return
 
-        const options = optionsRef.current
+		options.classList.add(styles.optionsUnload)
 
-        if (!options) return
+		options.onanimationend = () => {
+			options.classList.remove(styles.optionsUnload)
+			props.setOptions(false)
+		}
 
-        options.classList.add(styles.optionsUnload)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
-        options.onanimationend = () => {
-            options.classList.remove(styles.optionsUnload)
-            props.setOptions(false)
-        }
+	useOutsideClick(optionsRef, handleClose)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    useOutsideClick(optionsRef, handleClose)
-
-    return (
-        <div
-            ref={optionsRef}
-            className={styles.options}
-        >
-            {props.options.map(option => <SelectOptionsItem
-                key={option.value}
-                setOption={props.setOption}
-                handleClose={handleClose}
-                onSelect={props.onSelect}
-                {...option}
-            />
-            )}
-        </div>
-    )
+	return (
+		<div ref={optionsRef} className={styles.options}>
+			{props.options.map((option) => (
+				<SelectOptionsItem
+					key={option.value}
+					setOption={props.setOption}
+					handleClose={handleClose}
+					onSelect={props.onSelect}
+					{...option}
+				/>
+			))}
+		</div>
+	)
 }
 
 export default SelectOptions

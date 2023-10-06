@@ -2,9 +2,7 @@ import styles from './fields.module.scss'
 
 import Tooltip from '@/components/ui/Tooltip'
 
-import {
-    BiTrash
-} from 'react-icons/bi'
+import { BiTrash } from 'react-icons/bi'
 
 import cn from '@/utils/cn'
 import inter from '@/assets/fonts/inter'
@@ -13,72 +11,78 @@ import { useDebounce, useSurvey } from '@/hooks'
 import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 
 const FieldsChoiceItem = ({ ...props }) => {
+	const mountRef = useRef(false)
 
-    const mountRef = useRef(false)
+	const { survey, setSurvey } = useSurvey()
 
-    const { survey, setSurvey } = useSurvey()
+	const [textValue, setTextValue] = useState(props.text)
 
-    const [textValue, setTextValue] = useState(props.text)
+	const text = useDebounce(textValue, 500)
 
-    const text = useDebounce(textValue, 500)
+	const selectedQuestion = useMemo(() => {
+		return survey.questions.find(
+			(question) => question._id === props.questionId
+		)
+	}, [props.questionId, survey.questions])
 
-    const selectedQuestion = useMemo(() => {
-        return survey.questions.find(question => question._id === props.questionId)
-    }, [props.questionId, survey.questions])
+	const handleDelete = useCallback(() => {
+		selectedQuestion.fields = selectedQuestion.fields.filter(
+			(field) => field._id != props._id
+		)
 
-    const handleDelete = useCallback(() => {
+		setSurvey({ ...survey })
 
-        selectedQuestion.fields = selectedQuestion.fields.filter(field => field._id != props._id)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [survey, selectedQuestion])
 
-        setSurvey({ ...survey })
+	useEffect(() => {
+		if (!mountRef.current) {
+			mountRef.current = true
+			return
+		}
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [survey, selectedQuestion])
+		const selectedField = selectedQuestion.fields.find(
+			(field) => field._id === props._id
+		)
 
-    useEffect(() => {
+		selectedField.text = text
 
-        if (!mountRef.current) {
-            mountRef.current = true
-            return
-        }
+		setSurvey({ ...survey })
 
-        const selectedField = selectedQuestion.fields.find(field => field._id === props._id)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [text, mountRef])
 
-        selectedField.text = text
+	return (
+		<div className={styles.choiceItem}>
+			<div
+				className={cn(
+					styles.choiceItemBullet,
+					styles[
+						'choiceItemBullet' +
+							(props.mode === 'singleChoice' ? 'Circle' : 'Square')
+					]
+				)}
+			/>
+			<input
+				data-id={props._id}
+				defaultValue={props.text}
+				minLength={1}
+				maxLength={32}
+				onChange={(event) => setTextValue(event.target.value)}
+				className={cn(styles.choiceItemInput, inter)}
+				autoComplete="off"
+				required
+			/>
 
-        setSurvey({ ...survey })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [text, mountRef])
-
-    return (
-        <div className={styles.choiceItem}>
-            <div className={cn(
-                styles.choiceItemBullet,
-                styles['choiceItemBullet' + (props.mode === 'singleChoice' ? 'Circle' : 'Square')]
-            )} />
-            <input
-                data-id={props._id}
-                defaultValue={props.text}
-                minLength={1}
-                maxLength={32}
-                onChange={event => setTextValue(event.target.value)}
-                className={cn(styles.choiceItemInput, inter)}
-                autoComplete="off"
-                required
-            />
-
-            {(selectedQuestion.fields.length > 1) && <Tooltip text="Usuń opcję" direction="right">
-                <button
-                    onClick={handleDelete}
-                    className={styles.choiceItemDelete}
-                >
-                    <BiTrash />
-                </button>
-            </Tooltip>}
-
-        </div>
-    )
+			{selectedQuestion.fields.length > 1 && (
+				<Tooltip text="Usuń opcję" direction="right">
+					<button onClick={handleDelete} className={styles.choiceItemDelete}>
+						<BiTrash />
+					</button>
+				</Tooltip>
+			)}
+		</div>
+	)
 }
 
 export default FieldsChoiceItem
